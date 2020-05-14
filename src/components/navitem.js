@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function Navitem({ handleClick, text, children }) {
+export default function Navitem({ handleClick, text, open, children }) {
 
   return (
     <li className="nav-item">
       <div className="nav-tab" onClick={handleClick}>
         {children}
-        <span className="nav-text">{text}</span>
+        <span className={open ? "nav-text-open":"nav-text-close"}>{text}</span>
       </div>
     </li>
   )

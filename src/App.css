@@ -6,17 +6,28 @@ body, html {
   height: 100%;
 }
 
-#app {
+#app, #root {
   display: flex;
   height: 100%;
+  width: 100%;
 }
 
-.navbar {
+.navbar-close {
   width: 5rem;
   height: 100vh;
   position: fixed;
   background-color: #2A2D43;
   transition: 200ms ease;
+  z-index: 1000;
+}
+
+.navbar-open {
+  width: 16rem;
+  height: 100vh;
+  position: fixed;
+  background-color: #2A2D43;
+  transition: 200ms ease;
+  z-index: 1000;
 }
 
 .navbar-list {
@@ -57,17 +68,14 @@ body, html {
   margin: 0 1.5rem;
 }
 
-.nav-text {
+.nav-text-close {
   display: none;
   margin: 1rem;
 }
 
-.navbar:hover {
-  width: 16rem;
-}
-
-.navbar:hover .nav-text {
+.nav-text-open {
   display: block;
+  margin: 1rem;
 }
 
 #username {
@@ -79,15 +87,148 @@ body, html {
   letter-spacing: 0.3ch;
 }
 
-#username svg {
-  transform: rotate(0deg);
+#navbar:hover #username svg{
+  transform: rotate(-90deg);
   transition: transform 600ms;
 }
 
-.navbar:hover #username svg {
-  transform: rotate(-90deg);
+.postbar-close {
+  margin-left: 5rem;
+  width: 0;
+  height: 100vh;
+  position: fixed;
+  background-color: #414361;
+  transition: 400ms ease;
+  z-index: 1;
 }
 
-.main {
+.postbar-open {
   margin-left: 5rem;
+  width: 18rem;
+  height: 100vh;
+  position: fixed;
+  background-color: #414361;
+  transition: 400ms ease;
+  z-index: 1;
+}
+
+.post-close {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem 1rem;
+  display: none;
+  z-index: 1;
+}
+
+.post-open {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem 1rem;
+  display: block;
+  z-index: 1;
+}
+
+.post-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: rgb(65, 204, 199);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3ch;
+  margin: 0.5rem;
+  font-size: 1.5rem;
+  transition: 600ms;
+}
+
+.post-header svg {
+  width: 1.5rem;
+}
+
+.xicon {
+  height: 1.5rem;
+  margin-left: 0.5rem;
+}
+
+.xicon:hover {
+  color: rgb(233, 165, 62);
+  transition: 600ms;
+  cursor: pointer;
+}
+
+.post-form {
+  justify-content: flex-end;
+  transition: 600ms ease;
+  display: block;
+}
+
+.field {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.inline.fields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui.input, .field textarea {
+  width: 16rem;
+}
+
+.ui.button {
+  background-color: rgb(65, 204, 199);
+}
+
+.display-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.display-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.display-exit {
+  opacity: 0;
+  transform: translateX(-10%);
+  transition: .3s ease-in-out;
+}
+
+.display-exit-active {
+  opacity: 0;
+  transform: translateX(10%);
+  transition: .3s ease-in-out;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.main-container {
+  margin-left: 5rem;
+  background-color: rgb(244, 239, 239);
+  height: 100%;
+  width: 100%;
+}
+
+.title {
+  background-color: rgb(219, 58, 139);
+  text-align: right;
+  height: 4rem;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 4rem;
+  border: 1px solid rgb(201, 52, 126);
+}
+
+.title h1 {
+  color: white;
+  text-shadow: 1px 1px 1px rgb(223, 58, 58);
+}
+
+div.leaflet-top.leaflet-left {
+  right: 1rem;
 }
