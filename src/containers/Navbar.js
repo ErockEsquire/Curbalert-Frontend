@@ -6,7 +6,7 @@ import { ReactComponent as UsernameIcon } from '../icons/username.svg'
 import { ReactComponent as SettingsIcon } from '../icons/settings.svg'
 
 import Post from '../components/post'
-import History from '../components/history'
+import Histories from '../components/histories'
 import Navitem from '../components/navitem'
 
 const Username = (props) => {
@@ -20,7 +20,7 @@ const Username = (props) => {
   )
 }
 
-export default function Navbar() {
+export default function Navbar({ user, handleNewItem, histories, street, city, state, zip, latitude, longitude }) {
 
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(false);
@@ -50,20 +50,19 @@ export default function Navbar() {
         </ul>
       </div>
 
-      <Post tab={post} handleClick={setPost}/>
-      <History tab={history} handleClick={setHistory}/>
+      <Post 
+      tab={post} 
+      handleClick={setPost} 
+      user={user} 
+      handleNewItem={handleNewItem}
+      street={street}
+      city={city}
+      state={state}
+      zip={zip}
+      latitude={latitude}
+      longitude={longitude}
+      />
+      <Histories tab={history} handleClick={setHistory} histories={histories}/>
     </nav>
   )
 }
-
-{/* <div className={post ? "postbar-open":"postbar-close"}>
-  <div className="post">
-    <div className="post-header">
-      <span>Post </span>
-      <div className="xicon" onClick={() => setPost(false)}><XIcon/></div>
-    </div>
-    <form className="post-form">
-
-    </form>
-  </div>
-</div> */}

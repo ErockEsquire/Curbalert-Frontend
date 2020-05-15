@@ -104,7 +104,7 @@ body, html {
 
 .postbar-open {
   margin-left: 5rem;
-  width: 18rem;
+  width: 20rem;
   height: 100vh;
   position: fixed;
   background-color: #414361;
@@ -164,9 +164,21 @@ body, html {
   display: block;
 }
 
+.post-form label {
+  color: white;
+}
+
+.form-address {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 18rem;
+}
+
 .field {
   margin-bottom: 1rem;
   text-align: center;
+  max-width: 18rem;
 }
 
 .inline.fields {
@@ -175,11 +187,23 @@ body, html {
 }
 
 .ui.input, .field textarea {
-  width: 16rem;
+  width: 18rem;
+}
+
+.ui.fluid.dropdown {
+  width: 18rem;
 }
 
 .ui.button {
   background-color: rgb(65, 204, 199);
+}
+
+.ui.checkbox label, .ui.checkbox+label {
+  color: white;
+}
+
+input {
+  font-family: Lato;
 }
 
 .display-enter {
@@ -206,6 +230,22 @@ body, html {
   transition: opacity 300ms, transform 300ms;
 }
 
+.histories {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.histories h3 {
+  color: white;
+  text-align: right;
+  margin-right: 1rem;
+}
+
+div.leaflet-top.leaflet-left {
+  right: 1rem;
+}
+
 .main-container {
   margin-left: 5rem;
   background-color: rgb(244, 239, 239);
@@ -214,21 +254,22 @@ body, html {
 }
 
 .title {
-  background-color: rgb(219, 58, 139);
+  background-color: rgb(175, 78, 128);
   text-align: right;
   height: 4rem;
   align-items: center;
   display: flex;
   justify-content: flex-end;
   padding: 1rem 4rem;
-  border: 1px solid rgb(201, 52, 126);
 }
 
 .title h1 {
   color: white;
-  text-shadow: 1px 1px 1px rgb(223, 58, 58);
+  text-shadow: 1px 1px 1px rgb(165, 59, 114);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 3rem;
 }
 
-div.leaflet-top.leaflet-left {
-  right: 1rem;
+.main {
+  display: flex;
 }
