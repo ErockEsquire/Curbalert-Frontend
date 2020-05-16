@@ -110,6 +110,7 @@ body, html {
   background-color: #414361;
   transition: 400ms ease;
   z-index: 1;
+  overflow-y: scroll;
 }
 
 .post-close {
@@ -253,7 +254,7 @@ div.leaflet-top.leaflet-left {
   width: 100%;
 }
 
-.title {
+.header {
   background-color: rgb(175, 78, 128);
   text-align: right;
   height: 4rem;
@@ -263,7 +264,7 @@ div.leaflet-top.leaflet-left {
   padding: 1rem 4rem;
 }
 
-.title h1 {
+.header h1 {
   color: white;
   text-shadow: 1px 1px 1px rgb(165, 59, 114);
   font-family: 'Bebas Neue', cursive;
@@ -272,4 +273,129 @@ div.leaflet-top.leaflet-left {
 
 .main {
   display: flex;
+  height: 90%;
+}
+
+.leaflet-popup-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(244, 239, 239);
+}
+
+.leaflet-popup-content-wrapper h3 {
+  margin: 0;
+  max-width: 14rem;
+}
+
+.popup {
+  font-size: 13px;
+  font-family: "Lato",'Helvetica Neue',Arial,Helvetica,sans-serif;
+  text-align: center;
+}
+
+.popup h4 {
+  font-family: "Lato",'Helvetica Neue',Arial,Helvetica,sans-serif;
+  margin: 0;
+}
+
+.leaflet-popup-content {
+  margin: 5px;
+  max-width: 14rem;
+}
+
+.popup-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+}
+
+.popup-image {
+  height: 10rem;
+  width: 14rem;
+  object-fit: cover;
+  display: block;
+  background-color: rgb(218, 203, 203);
+}
+
+.popup-image-large {
+  height: 100%;
+  width: 18rem;
+  object-fit: contain;
+  right: 2rem;
+  position: relative;
+}
+
+.popup p {
+  margin: 0 0 0.25rem 0;
+}
+
+.popup:last-child p {
+  margin: 0;
+}
+
+.item-one {
+  display: flex;
+  justify-content: space-around;
+  text-transform: capitalize;
+  text-align: left;
+}
+
+.item-two {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  text-align: right;
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.histories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+.history-title {
+  display: flex;
+  justify-content: space-between;
+  height: 2rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.history-image {
+  flex-grow: 1;
+  max-width: 18rem;
+  object-fit: cover;
+}
+
+.history-image-large {
+  flex-grow: 1;
+  max-width: 18rem;
+  transform: scale(1.3);
+  object-fit: cover;
+}
+
+.history-details {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+  color: white;
+}
+
+.history p {
+  margin: .25rem 0;
+}
+
+.history-left {
+  width: 60%;
+}
+
+.history-right {
+  display: flex;
+  flex-direction: column;
 }
