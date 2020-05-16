@@ -57,23 +57,8 @@ class App extends React.Component {
     navigator.geolocation.getCurrentPosition(
       (position) => {(this.geolocationCallback(position))}
     )
-    fetch(`http://localhost:3000/items`)
-      .then(response => response.json())
-      .then(items => {
-        const activeItems = items.filter(item => this.checkDate(item.date) <= 3)
-        this.setState({
-          ...this.state,
-          items: activeItems
-        })
-      })
-    fetch(`http://localhost:3000/${this.state.user}/items`)
-      .then(response => response.json())
-      .then(items => {
-        this.setState({
-          ...this.state,
-          histories: items
-        })
-      })
+    this.fetchItems()
+    this.fetchHistories()
   }
 
   geolocationCallback(position) {
@@ -112,6 +97,29 @@ class App extends React.Component {
     })
   }
 
+  fetchItems = () => {
+    fetch(`http://localhost:3000/items`)
+    .then(response => response.json())
+    .then(items => {
+      const activeItems = items.filter(item => this.checkDate(item.date) <= 3)
+      this.setState({
+        ...this.state,
+        items: activeItems
+      })
+    })
+  }
+
+  fetchHistories = () => {
+    fetch(`http://localhost:3000/${this.state.user}/items`)
+    .then(response => response.json())
+    .then(items => {
+      this.setState({
+        ...this.state,
+        histories: items
+      })
+    })
+  }
+
   checkDate = (date) => {
     const date1 = new Date(date);
     const date2 = new Date();
@@ -142,6 +150,23 @@ class App extends React.Component {
         image: event.target.files[0]
       }
     })
+  }
+
+  handleDelete = (itemId) => {
+    fetch(`http://localhost:3000/items/${itemId}`, {
+      method: 'DELETE'
+    })
+      .then(response => {
+        if(response.ok){
+          const items = this.state.items.filter(item => item.id !== itemId)
+          const histories = this.state.histories.filter(history => history.id !== itemId)
+          this.setState({
+            ...this.state,
+            items: items,
+            histories: histories
+          })
+        }
+      })
   }
 
   handleSubmit = (event) => {
@@ -234,6 +259,7 @@ class App extends React.Component {
         handleChange={this.handleChange}
         handleUpload={this.handleUpload}
         handleSubmit={this.handleSubmit}
+        handleDelete={this.handleDelete}
         />
         <Main 
         currentLat={this.state.currentLat} 

@@ -20,8 +20,8 @@ const Username = (props) => {
   )
 }
 
-export default function Navbar({ user, handleNewItem, checkDate, histories, form, latitude, longitude, handleChange, handleUpload, handleSubmit }) {
-
+export default function Navbar(props) {
+  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, handleChange, handleUpload, handleSubmit, handleDelete } = props
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(false);
   const [history, setHistory] = useState(false);
@@ -62,7 +62,7 @@ export default function Navbar({ user, handleNewItem, checkDate, histories, form
       handleUpload={handleUpload}
       handleSubmit={handleSubmit}
       />
-      <Histories tab={history} handleClick={setHistory} histories={histories} checkDate={checkDate}/>
+      <Histories tab={history} handleClick={setHistory} histories={histories} checkDate={checkDate} handleDelete={handleDelete}/>
     </nav>
   )
 }

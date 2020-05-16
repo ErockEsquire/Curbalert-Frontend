@@ -197,6 +197,7 @@ body, html {
 
 .ui.button {
   background-color: rgb(65, 204, 199);
+  width: 6rem;
 }
 
 .ui.checkbox label, .ui.checkbox+label {
@@ -398,4 +399,27 @@ div.leaflet-top.leaflet-left {
 .history-right {
   display: flex;
   flex-direction: column;
+}
+
+.ui.icon.input>input {
+  border-radius: 20px;
+  margin: 1rem 0;
+}
+
+.ui.icon.input {
+  width: 16rem;
+  margin: auto;
+  display: flex;
+}
+
+.ui.animated.button, .ui.inverted.red.button {
+  height: 2rem;
+  width: 6rem;
+  right: 0rem;
+  display: flex;
+  justify-content: center;
+}
+
+.visible.content {
+  bottom: 3px;
 }

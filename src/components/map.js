@@ -42,7 +42,7 @@ export default class MapContainer extends React.Component {
 
           {items.length > 0 ?
             items.map(item => {
-              return <Marker position={[item.latitude, item.longitude]}>
+              return <Marker key={item.id} position={[item.latitude, item.longitude]}>
                 <Popup>
                   <div className="popup">
                     <h4>{item.name}</h4>

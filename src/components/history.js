@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Accordion, Icon, Label } from 'semantic-ui-react'
+import { Accordion, Icon, Label, Button } from 'semantic-ui-react'
 
 export default function History(props) {
 
@@ -15,12 +15,15 @@ export default function History(props) {
     category,
     claimed,
     comment,
-    image_url
+    image_url,
+    id
   } = props.history
 
-  const { checkDate } = props
+  const { checkDate, handleDelete } = props
   const [open, setOpen] = useState(false)
   const [large, setLarge] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
+  const [deleteButton, setDeleteButton] = useState(false)
 
   return (
     <Accordion inverted>
@@ -30,7 +33,7 @@ export default function History(props) {
           <div className="history-title">
           <p>{name}</p>
           {checkDate(date) <= 3 ? 
-            <Label as='a' color='red' tag>
+            <Label as='a' color='orange' tag>
               Active
             </Label>:null}
           </div>
@@ -50,7 +53,18 @@ export default function History(props) {
               </div>
             </div>
             <p>{comment}</p>
-            <p>Claimed: {claimed ? "Yes":"No"}</p>
+            <div className="history-details">
+              <div className="history-left">
+                <p>Claimed: {claimed ? "Yes":"No"}</p>
+              </div>
+              <div className="history-right">
+                {deleteButton ? <Button onClick={() => setShowDelete(true)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
+                  <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "rgb(65, 204, 199)"}}>Delete</Button>}
+                <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
+                  <span style={{lineHeight: "0px"}}>Confirm</span>
+                </Button>
+              </div>
+            </div>
           </div>
         </Accordion.Content>
       </Accordion>
