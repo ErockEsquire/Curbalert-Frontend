@@ -14,7 +14,9 @@ class App extends React.Component {
     if(hour > 12){
       hour -= 12
       meridiem = "PM"
-    } 
+    } else if(hour === 0) {
+      hour = 12
+    }
     return `${hour}:${minute} ${meridiem}`
   }
   

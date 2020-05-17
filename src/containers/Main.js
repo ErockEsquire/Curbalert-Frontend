@@ -7,7 +7,11 @@ export default function Main({currentLat, currentLong, items, street, city, stat
   return (
     <main className="main-container">
       <div className="header">
-        <h1>CurbAlert</h1>
+        <h1 className="header-title">CurbAlert</h1>
+        <div className="header-bar">
+          <h2 className="header-text">Dashboard</h2>
+          <h2 className="header-text">Active Items</h2>
+        </div>
       </div>
       <section className="main">
         <Map 
