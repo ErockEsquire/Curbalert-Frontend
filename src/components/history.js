@@ -19,7 +19,7 @@ export default function History(props) {
     id
   } = props.history
 
-  const { checkDate, handleDelete } = props
+  const { checkDate, addToDashboard, handleDelete } = props
   const [open, setOpen] = useState(false)
   const [large, setLarge] = useState(false)
   const [showDelete, setShowDelete] = useState(false)

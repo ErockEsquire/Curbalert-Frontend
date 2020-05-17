@@ -9,7 +9,7 @@ import styled from 'styled-components';
     transform: scale(1.25);
     position: relative;
     right: 1rem;
-    top: 3rem;
+    top: 2rem;
   }
   `
 

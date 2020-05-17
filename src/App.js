@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
+import arrayMove from 'array-move';
 
 class App extends React.Component {
 
@@ -31,6 +32,7 @@ class App extends React.Component {
     currentLong: 0,
     items: [],
     histories: [],
+    dashboard: [],
     street_address: "",
     city_address: "",
     state_address: "",
@@ -71,8 +73,10 @@ class App extends React.Component {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       }
-    }, () => this.geoCodeLocation())
+    })
   }
+
+  // , () => this.geoCodeLocation()
   
   geoCodeLocation = () => {
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
@@ -104,7 +108,7 @@ class App extends React.Component {
       const activeItems = items.filter(item => this.checkDate(item.date) <= 3)
       this.setState({
         ...this.state,
-        items: activeItems
+        items: activeItems.reverse()
       })
     })
   }
@@ -115,7 +119,7 @@ class App extends React.Component {
     .then(items => {
       this.setState({
         ...this.state,
-        histories: items
+        histories: items.reverse()
       })
     })
   }
@@ -125,6 +129,17 @@ class App extends React.Component {
     const date2 = new Date();
     return Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
   }
+
+  addToDashboard = () => {
+
+  }
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState(({items}) => ({
+      ...this.state,
+      items: arrayMove(items, oldIndex, newIndex),
+    }));
+  };
 
   handleNewItem = (item) => {
     this.setState({
@@ -256,6 +271,7 @@ class App extends React.Component {
         form={this.state.form}
         latitude={this.state.currentLat}
         longitude={this.state.currentLong}
+        addToDashboard={this.addToDashboard}
         handleChange={this.handleChange}
         handleUpload={this.handleUpload}
         handleSubmit={this.handleSubmit}
@@ -269,6 +285,7 @@ class App extends React.Component {
         city={this.state.city_address}
         state={this.state.state_address}
         zip={this.state.zip_address}
+        onSortEnd={this.onSortEnd}
         />
       </section>
     );

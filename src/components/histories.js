@@ -23,12 +23,12 @@ export default class Histories extends React.Component {
   }
 
   renderHistories = () => {
-    return this.filterHistories(this.props.histories).reverse().map(history => <History key={history.id} history={history} checkDate={this.props.checkDate} handleDelete={this.props.handleDelete}/>)
+    return this.filterHistories(this.props.histories).map(history => <History key={history.id} history={history} checkDate={this.props.checkDate} addToDashboard={this.props.addToDashboard} handleDelete={this.props.handleDelete}/>)
   }
   
   render() {
     const { tab, handleClick } = this.props
-    
+
     return (
       <div className={tab ? "postbar-open":"postbar-close"}>
         <div className={tab ? "post-open":"post-close"}>

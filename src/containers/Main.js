@@ -1,7 +1,8 @@
 import React from 'react';
 import Map from '../components/map'
+import Section from './Section'
 
-export default function Main({currentLat, currentLong, items, street, city, state, zip}) {
+export default function Main({currentLat, currentLong, items, street, city, state, zip, onSortEnd}) {
 
   return (
     <main className="main-container">
@@ -18,7 +19,7 @@ export default function Main({currentLat, currentLong, items, street, city, stat
         state={state}
         zip={zip}
         />
-        <div></div>
+        <Section items={items} onSortEnd={onSortEnd}/>
       </section>
     </main>
   )

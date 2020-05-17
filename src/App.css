@@ -280,7 +280,6 @@ div.leaflet-top.leaflet-left {
 .leaflet-popup-content-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: rgb(244, 239, 239);
 }
 
 .leaflet-popup-content-wrapper h3 {
@@ -315,7 +314,6 @@ div.leaflet-top.leaflet-left {
   width: 14rem;
   object-fit: cover;
   display: block;
-  background-color: rgb(218, 203, 203);
 }
 
 .popup-image-large {
@@ -422,4 +420,37 @@ div.leaflet-top.leaflet-left {
 
 .visible.content {
   bottom: 3px;
+}
+
+.section {
+  display: flex;
+}
+
+.dashboard {
+  width: 50%;
+  padding: 1rem 1rem 1rem 0;
+}
+
+.dash-container {
+  height: 100%;
+}
+
+.dash-item:first-child {
+  height: 18rem;
+}
+
+.dash-item {
+  height: 6rem;
+  margin-bottom: 1rem;
+}
+
+.dash-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.active-div {
+  width: 50%;
+  padding: 1rem 1rem 1rem 0;
 }
