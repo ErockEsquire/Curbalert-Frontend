@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Accordion, Icon, Label, Button } from 'semantic-ui-react'
+import { Accordion, Icon, Label, Button, Modal } from 'semantic-ui-react'
 
 export default function History(props) {
 
@@ -21,9 +21,21 @@ export default function History(props) {
 
   const { checkDate, addToDashboard, handleDelete } = props
   const [open, setOpen] = useState(false)
-  const [large, setLarge] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [deleteButton, setDeleteButton] = useState(false)
+
+  const tagIt = (date) => {
+    const days = checkDate(date)
+    if(days <= 1) {
+      return <Label as='a' color='red' tag>Active</Label>
+    } else if(days === 2) {
+      return <Label as='a' color='orange' tag>Active</Label>
+    } else if(days === 3) {
+      return <Label as='a' color='blue' tag>Active</Label>
+    } else {
+      return null
+    }
+  }
 
   return (
     <Accordion inverted>
@@ -31,18 +43,21 @@ export default function History(props) {
           onClick={() => setOpen(!open)}
           >
           <div className="history-title">
-          <p>{name}</p>
-          {checkDate(date) <= 3 ? 
-            <Label as='a' color='orange' tag>
-              Active
-            </Label>:null}
+            <p>{name}</p>
           </div>
-          <Icon name='dropdown' />
-          <span><strong>{date} | {time}</strong></span>
+          <div className="history-datetime">
+            <Icon name={open ? 'caret down':'caret right'}/>
+            <span><strong>{date} | {time}</strong></span>
+            {tagIt(date)}
+          </div>
         </Accordion.Title>
         <Accordion.Content active={open === true}>
           <div className="history">
-            <img className={large ? "history-image-large":"history-image"} src={image_url} alt={name} onClick={() => setLarge(!large)}/>
+            <Modal basic size='mini' trigger={<img className={"history-image"} src={image_url} alt={name} />}>
+              <Modal.Content image>
+                <img className={"image-modal"} src={image_url} alt={name}/>
+              </Modal.Content>
+            </Modal>
             <div className="history-details">
               <div className="history-left">
                 <span>{street_address}, {city_address}, {state_address} {zip_address} </span>
@@ -58,7 +73,7 @@ export default function History(props) {
                 <p>Claimed: {claimed ? "Yes":"No"}</p>
               </div>
               <div className="history-right">
-                {deleteButton ? <Button onClick={() => setShowDelete(true)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
+                {deleteButton ? <Button onClick={() => setShowDelete(!showDelete)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
                   <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "rgb(65, 204, 199)"}}>Delete</Button>}
                 <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
                   <span style={{lineHeight: "0px"}}>Confirm</span>

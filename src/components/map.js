@@ -1,21 +1,19 @@
 import React from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
 import styled from 'styled-components';
-
-  const HoverImage = styled.img`
-   :hover{
-    height: 100%;
-    width: 16rem;
-    transform: scale(1.25);
-    position: relative;
-    right: 1rem;
-    top: 2rem;
-  }
-  `
+import { Modal } from 'semantic-ui-react'
 
 export default class MapContainer extends React.Component {
   state = {
-    zoom: 15
+    zoom: 15,
+    large: false
+  }
+
+  setLarge = () => {
+    this.setState({
+      ...this.state,
+      large: !this.state.large
+    })
   }
 
   render() {
@@ -26,7 +24,7 @@ export default class MapContainer extends React.Component {
 
       <div className="map-container">
         <Map className="map" center={position} zoom={this.state.zoom} 
-        style={{display: "inline-block", margin:"1.5rem 1rem", height: "500px", width: "800px", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
+        style={{display: "inline-block", margin:"1rem 1rem", height: "505px", width: "800px", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
@@ -46,7 +44,9 @@ export default class MapContainer extends React.Component {
                 <Popup>
                   <div className="popup">
                     <h4>{item.name}</h4>
-                    <HoverImage className="popup-image" src={item.image_url} alt={item.name}/>
+                    <div className="image-container">
+                      <img className={this.state.large ? "popup-image-large":"popup-image"} src={item.image_url} alt={item.name} onClick={() => this.setLarge()}/>
+                    </div>
                     <p>Posted: {item.date} <strong>{item.time}</strong></p>
                     <div className="item-one">
                       <p>{item.street_address}, {item.city_address}, {item.state_address} {item.zip_address}</p>

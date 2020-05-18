@@ -29,25 +29,27 @@ export default class Post extends React.Component {
           </div>
           <CSSTransition in={tab} timeout={400} classNames="display" unmountOnExit>
             <form className="post-form" onSubmit={handleSubmit}>
-            <Form.Group widths='equal'>
-              <Form.Input placeholder="Name of item" name="name" value={name} onChange={handleChange}/>
-              <label>Image</label>
-              <input className="field" type="file" name="image" onChange={handleUpload}/>
-              <div className="form-address">
-                <Form.Input placeholder="Street Address" name="street" value={street} onChange={handleChange}/>
-                <Form.Input placeholder="City" name="city" value={city} onChange={handleChange} style={{width: '7rem', color: 'white'}}/>
-                <Form.Input placeholder="State" name="state" value={state} onChange={handleChange} maxLength="2" style={{width: '4.5rem', color: 'white'}}/>
-                <Form.Input placeholder="Zip" name="zip" value={zip} onChange={handleChange} maxLength="5" style={{width: '5.5rem', color: 'white'}}/>
-              </div>
-              <Form.Group inline>
-                <Form.Radio label='New' name="quality" value="new" checked={quality==="new"} onChange={handleChange}/>
-                <Form.Radio label='Like New' name="quality" value="like new" checked={quality==="like new"} onChange={handleChange}/>
-                <Form.Radio label='Used' name="quality" value="used" checked={quality==="used"} onChange={handleChange}/>
+              <Form.Group widths='equal'>
+                <Form.Input placeholder="Name of item" name="name*" value={name} onChange={handleChange} maxLength="20"/>
+                <label>Image</label>
+                <input className="field" type="file" name="image" onChange={handleUpload}/>
+                <div className="form-address">
+                  <Form.Input placeholder="Street Address*" name="street" value={street} onChange={handleChange}/>
+                  <Form.Input placeholder="City*" name="city" value={city} onChange={handleChange} maxLength="20" style={{width: '7rem', color: 'white'}}/>
+                  <Form.Input placeholder="State*" name="state" value={state} onChange={handleChange} maxLength="2" style={{width: '5rem', color: 'white'}}/>
+                  <Form.Input placeholder="Zip" name="zip" value={zip} onChange={handleChange} maxLength="5" style={{width: '5rem', color: 'white'}}/>
+                </div>
+                <Form.Group inline>
+                  <Form.Radio label='New' name="quality" value="new" checked={quality==="new"} onChange={handleChange}/>
+                  <Form.Radio label='Like New' name="quality" value="like new" checked={quality==="like new"} onChange={handleChange}/>
+                  <Form.Radio label='Used' name="quality" value="used" checked={quality==="used"} onChange={handleChange}/>
+                </Form.Group>
+                <Form.Select fluid options={categories} placeholder="Category" name="category" onChange={handleChange}/>
+                <Form>
+                  <Form.TextArea placeholder="Description" name="comment" value={comment} onChange={handleChange} maxLength="350"/>
+                </Form>
               </Form.Group>
-              <Form.Select fluid options={categories} placeholder="Category" name="category" onChange={handleChange}/>
-              <Form.TextArea placeholder="Description" name="comment" value={comment} onChange={handleChange}/>
-            </Form.Group>
-            <Form.Button onClick={() => handleClick(false)}>Post</Form.Button>
+              <Form.Button onClick={() => handleClick(false)}>Post</Form.Button>
             </form>
           </CSSTransition>
         </div>

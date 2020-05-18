@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Map from '../components/map'
-import Section from './Section'
+import Dashboard from '../components/dashboard'
+import Active from '../components/active'
 
 export default function Main({currentLat, currentLong, items, street, city, state, zip, onSortEnd}) {
 
+  const [dashboard, setDashboard] = useState(true)
+  
   return (
     <main className="main-container">
       <div className="header">
         <h1 className="header-title">CurbAlert</h1>
         <div className="header-bar">
-          <h2 className="header-text">Dashboard</h2>
-          <h2 className="header-text">Active Items</h2>
+          {dashboard ? <div className="color-block"><h2 className="header-text" onClick={() => setDashboard(true)}>Dashboard</h2></div>:<h2 className="header-text" onClick={() => setDashboard(true)}>Dashboard</h2>}
+          {dashboard ? <h2 className="header-text" onClick={() => setDashboard(false)}>Active Items</h2>:<div className="color-block"><h2 className="header-text" onClick={() => setDashboard(false)}>Active Items</h2></div>}
         </div>
       </div>
       <section className="main">
@@ -23,7 +26,10 @@ export default function Main({currentLat, currentLong, items, street, city, stat
         state={state}
         zip={zip}
         />
-        <Section items={items} onSortEnd={onSortEnd}/>
+        <section className="section">
+          {dashboard ? <Dashboard items={items} onSortEnd={onSortEnd}/>:
+          <Active/>}
+        </section>
       </section>
     </main>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
@@ -132,8 +132,21 @@ class App extends React.Component {
     return Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
   }
 
-  addToDashboard = () => {
+  addToDashboard = (item) => {
+    if(this.state.dashboard.length < 5) {
+      this.setState({
+        ...this.state,
+        dashboard: [item, ...this.state.dashboard]
+      })
+    }
+  }
 
+  removeFromDashboard = (itemId) => {
+    const dash = this.state.dashboard.filter(item => item.id !== item.Id)
+    this.setState({
+      ...this.state,
+      dashboard: dash
+    })
   }
 
   onSortEnd = ({oldIndex, newIndex}) => {
@@ -189,8 +202,7 @@ class App extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault()
     console.log(this.state.form)
-    console.log(this.state.form.street)
-    console.log(this.state.street_address)
+
     if(this.state.form.street !== this.state.street_address) {
       const street = this.state.form.street.replace(/ /g, '+')
       const city = this.state.form.city.replace(/ /g, '+')
@@ -238,7 +250,7 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(item => {
-        console.log(item)
+        this.addToDashboard(item)
         this.handleNewItem(item)
         this.setState({
           ...this.state,
