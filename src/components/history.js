@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Accordion, Icon, Label, Button, Modal } from 'semantic-ui-react'
+import { Accordion, Icon, Label, Button, Modal, Popup } from 'semantic-ui-react'
 
 export default function History(props) {
 
@@ -53,11 +53,21 @@ export default function History(props) {
         </Accordion.Title>
         <Accordion.Content active={open === true}>
           <div className="history">
-            <Modal basic size='mini' trigger={<img className={"history-image"} src={image_url} alt={name} />}>
-              <Modal.Content image>
-                <img className={"image-modal"} src={image_url} alt={name}/>
-              </Modal.Content>
-            </Modal>
+            <div className="history-image-container">
+              <img className={"history-image"} src={image_url} alt={name} />
+              <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
+                <Modal.Content image>
+                  <img className={"image-modal"} src={image_url} alt={name}/>
+                </Modal.Content>
+              </Modal>
+              <Popup 
+                // offset='0, 50px'
+                position='right center'
+                content='Add to Dashboard' 
+                size='tiny' 
+                trigger={<Icon className="from-history" name="add square" onClick={() => addToDashboard(props.history)}/>}
+              />
+            </div>
             <div className="history-details">
               <div className="history-left">
                 <span>{street_address}, {city_address}, {state_address} {zip_address} </span>

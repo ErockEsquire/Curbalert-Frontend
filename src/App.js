@@ -133,16 +133,16 @@ class App extends React.Component {
   }
 
   addToDashboard = (item) => {
+    console.log(item)
     if(this.state.dashboard.length < 5) {
       this.setState({
-        ...this.state,
         dashboard: [item, ...this.state.dashboard]
-      })
+      }, () => console.log(this.state))
     }
   }
 
   removeFromDashboard = (itemId) => {
-    const dash = this.state.dashboard.filter(item => item.id !== item.Id)
+    const dash = this.state.dashboard.filter(item => item.id !== itemId)
     this.setState({
       ...this.state,
       dashboard: dash
@@ -150,9 +150,9 @@ class App extends React.Component {
   }
 
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items}) => ({
+    this.setState(({dashboard}) => ({
       ...this.state,
-      items: arrayMove(items, oldIndex, newIndex),
+      dashboard: arrayMove(dashboard, oldIndex, newIndex),
     }));
   };
 
@@ -274,7 +274,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state)
+
     return (
       <section id="app">
         <Navbar
@@ -295,11 +295,14 @@ class App extends React.Component {
         currentLat={this.state.currentLat} 
         currentLong={this.state.currentLong} 
         items={this.state.items}
+        dashboard={this.state.dashboard}
         street={this.state.street_address}
         city={this.state.city_address}
         state={this.state.state_address}
         zip={this.state.zip_address}
         onSortEnd={this.onSortEnd}
+        addToDashboard={this.addToDashboard}
+        removeFromDashboard={this.removeFromDashboard}
         />
       </section>
     );

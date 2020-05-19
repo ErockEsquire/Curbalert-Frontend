@@ -10,7 +10,6 @@ body {
 
 #app, #root {
   display: flex;
-  /* height: 100vh; */
   width: 100%;
 }
 
@@ -200,6 +199,9 @@ body {
 .ui.button {
   background-color: rgb(65, 204, 199);
   width: 6rem;
+}
+
+.field.post {
   margin-top: 2rem;
 }
 
@@ -254,12 +256,12 @@ div.leaflet-top.leaflet-left {
 
 .main-container {
   margin-left: 5rem;
-  height: 100%;
+  height: 100vh;
   width: 100%;
 }
 
 .header {
-  background-color: #d45a5a;
+  /* background-color: #d45a5a; */
   height: 4rem;
   align-items: center;
   justify-content: space-between;
@@ -289,7 +291,7 @@ div.leaflet-top.leaflet-left {
   display: flex;
   justify-content: space-between;
   width: 34%;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
 .main {
@@ -316,6 +318,11 @@ div.leaflet-top.leaflet-left {
 .popup h4 {
   font-family: "Lato",'Helvetica Neue',Arial,Helvetica,sans-serif;
   margin: 0;
+}
+
+.popup-name {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .leaflet-popup-content {
@@ -423,10 +430,38 @@ div.leaflet-top.leaflet-left {
   margin-top: 5px;
 }
 
-.history-image {
+.history-image-container {
+  position: relative;
   flex-grow: 1;
+}
+
+.history-image {
   max-width: 18rem;
   object-fit: cover;
+  position: relative;
+}
+
+.search.plus.icon {
+  position: absolute;
+  font-size: 1.5rem;
+  left: 4px;
+  top: 8px;
+}
+
+.add.square.icon.from-history {
+  position: absolute;
+  font-size: 1.5rem;
+  right: 4px;
+  top: 8px;
+}
+
+.add.square.icon.popup {
+  font-size: 1.1rem;
+}
+
+.search.plus.icon:hover,
+.add.square.icon:hover {
+  cursor: pointer;
 }
 
 .image-modal {
@@ -488,20 +523,21 @@ div.leaflet-top.leaflet-left {
 
 .section {
   display: flex;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 100%;
 }
 
 .color-block {
-  background: linear-gradient(90deg, rgba(212,90,90,1) 25%, rgba(236,106,128,1) 50%, rgba(212,90,90,1) 75%);
+  /* background: linear-gradient(90deg, rgba(212,90,90,1) 25%, rgba(236,106,128,1) 50%, rgba(212,90,90,1) 75%); */
   transition: all 500ms ease;
-  transform: scale(1.1);
-  padding: 0 1rem;
+  transform: scale(1.25);
 }
 
 .dashboard {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  margin: 1rem .5rem 0 0;
+  margin: 1rem 0.5rem;
 }
 
 .dash-container {
@@ -533,10 +569,39 @@ div.leaflet-top.leaflet-left {
   border-radius: 1px solid black;
 }
 
+.dash-content {
+  width: 50%;
+}
+
+.dash-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dash-drag-container {
+  margin: 0.25rem 0.25rem 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.redriver.icon.dash-drag {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.minus.square.icon.dash-drag {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.dash-drag:hover {
+  cursor:pointer;
+}
+
 .dash-name {
   padding: 0 5px;
   font-weight: 1000;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin: 0;
   text-transform: capitalize;
 }
@@ -565,5 +630,4 @@ div.leaflet-top.leaflet-left {
 
 .active-div {
   width: 50%;
-  padding: 1rem 1rem 1rem 0;
 }

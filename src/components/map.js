@@ -1,7 +1,7 @@
 import React from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
 import styled from 'styled-components';
-import { Modal } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 
 export default class MapContainer extends React.Component {
   state = {
@@ -17,14 +17,13 @@ export default class MapContainer extends React.Component {
   }
 
   render() {
-    const { currentLat, currentLong, items, street, city, state, zip } = this.props
+    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard } = this.props
     const position = [currentLat, currentLong]
-    console.log(this.props)
     return (
 
       <div className="map-container">
         <Map className="map" center={position} zoom={this.state.zoom} 
-        style={{display: "inline-block", margin:"1rem 1rem", height: "505px", width: "800px", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
+        style={{display: "inline-block", margin:"0 0.5rem", height: "525px", width: "800px", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
@@ -43,7 +42,10 @@ export default class MapContainer extends React.Component {
               return <Marker key={item.id} position={[item.latitude, item.longitude]}>
                 <Popup>
                   <div className="popup">
-                    <h4>{item.name}</h4>
+                    <div className="popup-name">
+                      <Icon className="popup" name="add square" onClick={() => addToDashboard(item)}/>
+                      <h4>{item.name}</h4>
+                    </div>
                     <div className="image-container">
                       <img className={this.state.large ? "popup-image-large":"popup-image"} src={item.image_url} alt={item.name} onClick={() => this.setLarge()}/>
                     </div>

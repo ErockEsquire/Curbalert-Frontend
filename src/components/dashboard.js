@@ -1,15 +1,28 @@
-import React from 'react'
-import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import React, { useEffect } from 'react'
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import { Modal, Icon } from 'semantic-ui-react'
 
-export default function Dashboard({ items, onSortEnd }) {
+export default function Dashboard({ items, dashboard, onSortEnd, removeFromDashboard }) {
+
+  const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="redriver"/>);
   const SortableItemContainer = sortableContainer(({ children }) => <div className="dash-container">{children}</div>);
   const SortableItem = sortableElement(({ item }) => 
   <div className="dash-item">
-    <img className="dash-image" src={item.image_url} alt={item.name}/>
+    <Modal basic size='mini' trigger={<img className="dash-image" src={item.image_url} alt={item.name}/>}>
+      <Modal.Content image>
+        <img className={"image-modal"} src={item.image_url} alt={item.name}/>
+      </Modal.Content>
+    </Modal>
     <div className="dash-content">
-      <div className="dash-datetime">
-        <span>{item.date}</span>
-        <span>{item.time}</span>
+      <div className="dash-top">
+        <div className="dash-datetime">
+          <span>{item.date}</span>
+          <span>{item.time}</span>
+        </div>
+        <div className="dash-drag-container">
+          <DragHandle />
+          <Icon className="dash-drag" name="minus square" onClick={()=>removeFromDashboard(item.id)}/>
+        </div>
       </div>
       <p className="dash-name">{item.name}</p>
       <div className="dash-datetime">
@@ -20,14 +33,15 @@ export default function Dashboard({ items, onSortEnd }) {
     </div>
   </div>)
 
-  const renderItems = () => {
-    return items.map((item, index) => <SortableItem index={index} item={item}/>)
+
+  const renderDashboard = () => {
+    return dashboard.map((item, index) => <SortableItem index={index} item={item}/>)
   }
 
   return(
     <div className="dashboard">
-      <SortableItemContainer axis="y" onSortEnd={onSortEnd}>
-        {renderItems()}
+      <SortableItemContainer axis="y" onSortEnd={onSortEnd} useDragHandle>
+        {renderDashboard()}
       </SortableItemContainer>
     </div>
   )

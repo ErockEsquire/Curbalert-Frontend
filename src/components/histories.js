@@ -1,6 +1,5 @@
 import React from 'react'
 import { ReactComponent as XIcon } from '../icons/x.svg'
-import { Search } from 'semantic-ui-react'
 import History from './history'
 
 export default class Histories extends React.Component {

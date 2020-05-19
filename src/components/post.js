@@ -49,7 +49,7 @@ export default class Post extends React.Component {
                   <Form.TextArea placeholder="Description" name="comment" value={comment} onChange={handleChange} maxLength="350"/>
                 </Form>
               </Form.Group>
-              <Form.Button onClick={() => handleClick(false)}>Post</Form.Button>
+              <Form.Button className="post" onClick={() => handleClick(false)}>Post</Form.Button>
             </form>
           </CSSTransition>
         </div>
