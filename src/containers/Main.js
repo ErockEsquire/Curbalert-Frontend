@@ -3,9 +3,9 @@ import Map from '../components/map'
 import Dashboard from '../components/dashboard'
 import Active from '../components/active'
 
-export default function Main({currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard}) {
+export default function Main({ user, currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard, checkDate, handleClaim, handleAvail }) {
 
-  const [dash, setDash] = useState(true)
+  const [dash, setDash] = useState(false)
   return (
     <main className="main-container">
       <div className="header">
@@ -27,8 +27,8 @@ export default function Main({currentLat, currentLong, items, dashboard, street,
         addToDashboard={addToDashboard}
         />
         <section className="section">
-          {dash ? <Dashboard items={items} dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard}/>:
-          <Active/>}
+          {dash ? <Dashboard dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard}/>:
+          <Active user={user} items={items} checkDate={checkDate} addToDashboard={addToDashboard} handleClaim={handleClaim} handleAvail={handleAvail}/>}
         </section>
       </section>
     </main>

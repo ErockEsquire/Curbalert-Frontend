@@ -1,6 +1,5 @@
 import React from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
-import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react'
 
 export default class MapContainer extends React.Component {
@@ -23,7 +22,7 @@ export default class MapContainer extends React.Component {
 
       <div className="map-container">
         <Map className="map" center={position} zoom={this.state.zoom} 
-        style={{display: "inline-block", margin:"0 0.5rem", height: "525px", width: "800px", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
+        style={{display: "inline-block", margin:"0 0.5rem", height: "87.5vh", width: "58vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
@@ -44,12 +43,13 @@ export default class MapContainer extends React.Component {
                   <div className="popup">
                     <div className="popup-name">
                       <Icon className="popup" name="add square" onClick={() => addToDashboard(item)}/>
-                      <h4>{item.name}</h4>
+                      <h3>{item.name}</h3>
                     </div>
+                    <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
                     <div className="image-container">
                       <img className={this.state.large ? "popup-image-large":"popup-image"} src={item.image_url} alt={item.name} onClick={() => this.setLarge()}/>
                     </div>
-                    <p>Posted: {item.date} <strong>{item.time}</strong></p>
+                    <p>{item.date} <strong>{item.time}</strong></p>
                     <div className="item-one">
                       <p>{item.street_address}, {item.city_address}, {item.state_address} {item.zip_address}</p>
                       <div className="item-two">
@@ -58,6 +58,7 @@ export default class MapContainer extends React.Component {
                       </div>
                     </div>
                     <p>{item.comment}</p>
+                    <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
                   </div>
                 </Popup>
               </Marker>

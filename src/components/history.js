@@ -39,59 +39,58 @@ export default function History(props) {
 
   return (
     <Accordion inverted>
-        <Accordion.Title
-          onClick={() => setOpen(!open)}
-          >
-          <div className="history-title">
-            <p>{name}</p>
+      <Accordion.Title onClick={() => setOpen(!open)}>
+        <div className="history-title">
+          <p>{name}</p>
+        </div>
+        <div className="history-datetime">
+          <Icon name={open ? 'caret down':'caret right'}/>
+          <span><strong>{date} | {time}</strong></span>
+          {tagIt(date)}
+        </div>
+      </Accordion.Title>
+
+      <Accordion.Content active={open === true}>
+        <div className="history-content">
+          <div className="history-image-container">
+            <img className={"history-image"} src={image_url} alt={name} />
+            <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
+              <Modal.Content image>
+                <img className={"image-modal"} src={image_url} alt={name}/>
+              </Modal.Content>
+            </Modal>
+            <Popup 
+              position='right center'
+              content='Add to Dashboard' 
+              size='tiny' 
+              trigger={<Icon className="from-history" name="add square" onClick={() => addToDashboard(props.history)}/>}
+            />
           </div>
-          <div className="history-datetime">
-            <Icon name={open ? 'caret down':'caret right'}/>
-            <span><strong>{date} | {time}</strong></span>
-            {tagIt(date)}
-          </div>
-        </Accordion.Title>
-        <Accordion.Content active={open === true}>
-          <div className="history">
-            <div className="history-image-container">
-              <img className={"history-image"} src={image_url} alt={name} />
-              <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
-                <Modal.Content image>
-                  <img className={"image-modal"} src={image_url} alt={name}/>
-                </Modal.Content>
-              </Modal>
-              <Popup 
-                // offset='0, 50px'
-                position='right center'
-                content='Add to Dashboard' 
-                size='tiny' 
-                trigger={<Icon className="from-history" name="add square" onClick={() => addToDashboard(props.history)}/>}
-              />
+
+          <div className="card-details">
+            <div className="card-left">
+              <span>{street_address}, {city_address}, {state_address} {zip_address} </span>
             </div>
-            <div className="history-details">
-              <div className="history-left">
-                <span>{street_address}, {city_address}, {state_address} {zip_address} </span>
-              </div>
-              <div className="history-right">
-                <span>{quality}</span>
-                <span>{category}</span>
-              </div>
-            </div>
-            <p>{comment}</p>
-            <div className="history-details">
-              <div className="history-left">
-                <p>Claimed: {claimed ? "Yes":"No"}</p>
-              </div>
-              <div className="history-right">
-                {deleteButton ? <Button onClick={() => setShowDelete(!showDelete)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
-                  <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "rgb(65, 204, 199)"}}>Delete</Button>}
-                <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
-                  <span style={{lineHeight: "0px"}}>Confirm</span>
-                </Button>
-              </div>
+            <div className="card-right">
+              <span>{quality}</span>
+              <span>{category}</span>
             </div>
           </div>
-        </Accordion.Content>
-      </Accordion>
+          <p>{comment}</p>
+          <div className="card-details">
+            <div className="card-left">
+              <p>Claimed: {claimed ? "Yes":"No"}</p>
+            </div>
+            <div className="card-right">
+              {deleteButton ? <Button onClick={() => setShowDelete(!showDelete)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
+                <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "rgb(65, 204, 199)"}}>Delete</Button>}
+              <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
+                <span style={{lineHeight: "0px"}}>Confirm</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Accordion.Content>
+    </Accordion>
   )
 }

@@ -62,7 +62,6 @@ class App extends React.Component {
       (position) => {(this.geolocationCallback(position))}
     )
     this.fetchItems()
-    this.fetchHistories()
   }
 
   geolocationCallback(position) {
@@ -79,7 +78,7 @@ class App extends React.Component {
   }
 
   // , () => this.geoCodeLocation()
-  
+
   geoCodeLocation = () => {
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
       .then(r => r.json())
@@ -107,11 +106,14 @@ class App extends React.Component {
     fetch(`http://localhost:3000/items`)
     .then(response => response.json())
     .then(items => {
-      const activeItems = items.filter(item => this.checkDate(item.date) <= 3)
+      const userItems = items.filter(item => item.users[0].id === this.state.user)
+      let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
+      activeItems = this.checkRecent(activeItems)
       this.setState({
         ...this.state,
-        items: activeItems.reverse()
-      })
+        items: activeItems,
+        histories: userItems
+      }, () => console.log(this.state))
     })
   }
 
@@ -132,12 +134,52 @@ class App extends React.Component {
     return Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
   }
 
+  checkTime = (time) => {
+    let hour = time.match(/\d+/)
+    hour = parseInt(hour[0])
+    let minute = time.match(/(?<=:)\d+/)
+    minute = parseInt(minute[0])
+    let meridiem = time.match(/\w+$/ig)
+    if(meridiem[0] === "PM"){
+        hour += 12
+    }
+    hour = hour * 60
+    let minutes = minute + hour
+    return minutes
+  }
+
+  checkRecent = (items) => {
+    let sorted = items.sort((a,b) => (this.checkDate(a.date) * 24 * 60) + (this.checkTime(a.time)) - (this.checkDate(b.date) * 24 * 60) + (this.checkTime(b.time)))
+    return sorted
+  }
+
+  checkDistance = (item) => {
+    function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
+      const R = 6371; // Radius of the earth in km
+      const dLat = deg2rad(lat2-lat1);  // deg2rad below
+      const dLng = deg2rad(lng2-lng1); 
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLng/2) * Math.sin(dLng/2)
+        ;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      const d = R * c; // Distance in km
+      return d;
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI/180)
+    }
+
+    return getDistanceFromLatLonInKm(this.state.currentLat, this.state.currentLong, item.latitude, item.longitude)
+  }
+
   addToDashboard = (item) => {
-    console.log(item)
     if(this.state.dashboard.length < 5) {
       this.setState({
         dashboard: [item, ...this.state.dashboard]
-      }, () => console.log(this.state))
+      })
     }
   }
 
@@ -156,6 +198,38 @@ class App extends React.Component {
     }));
   };
 
+  handleClaim = (item) => {
+    if(this.checkDistance(item) < 0.5) {
+      item.claimed = true
+      fetch(`http://localhost:3000/items/${item.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          claimed: item.claimed
+        })
+      })
+      .then(response => response.json())
+      .then(item => {
+        this.updateItem(item)
+        return true
+      })
+    } else {
+      return false
+    }
+  }
+
+  updateItem = (newItem) => {
+    let newItems = this.state.items.filter(item => item.id !== newItem.id)
+    newItems.push(newItem)
+    newItems = this.checkRecent(newItems)
+    this.setState({ 
+      items: newItems
+    })
+  }
+
   handleNewItem = (item) => {
     this.setState({
       items: [item, ...this.state.items],
@@ -173,7 +247,7 @@ class App extends React.Component {
     }, () => console.log(this.state))
   }
 
-  handleUpload = event => {
+  handleUpload = (event) => {
     this.setState({
       form: {
         ...this.state.form,
@@ -201,7 +275,6 @@ class App extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-    console.log(this.state.form)
 
     if(this.state.form.street !== this.state.street_address) {
       const street = this.state.form.street.replace(/ /g, '+')
@@ -224,7 +297,7 @@ class App extends React.Component {
   }
 
   submitForm = () => {
-    const { name, category, street, city, state, zip, comment, quality, time, date, claimed, latitude, longitude, image } = this.state.form
+    const { name, category, street, city, state, zip, comment, quality, time, date, validation, claimed, final, latitude, longitude, image } = this.state.form
     const formData = new FormData();
     formData.append('item[name]', name);
     formData.append('item[category]', category);
@@ -236,12 +309,13 @@ class App extends React.Component {
     formData.append('item[quality]', quality);
     formData.append('item[time]', time);
     formData.append('item[date]', date);
+    formData.append('item[validation]', validation)
     formData.append('item[claimed]', claimed);
+    formData.append('item[final]', final);
     formData.append('item[latitude]', latitude);
     formData.append('item[longitude]', longitude);
     formData.append('item[image]', image);
     formData.append('user[id]', this.state.user)
-    console.log(formData)
 
     fetch(`http://localhost:3000/items`, {
       method: "POST",
@@ -266,10 +340,12 @@ class App extends React.Component {
             time: this.getTime(),
             date: this.getDate(),
             image: null,
+            validation: 0,
             claimed: false,
+            final: false,
             ...this.state.form
           }
-        }, () => console.log(this.state))
+        })
       })
   }
 
@@ -291,7 +367,8 @@ class App extends React.Component {
         handleSubmit={this.handleSubmit}
         handleDelete={this.handleDelete}
         />
-        <Main 
+        <Main
+        user={this.state.user} 
         currentLat={this.state.currentLat} 
         currentLong={this.state.currentLong} 
         items={this.state.items}
@@ -303,6 +380,9 @@ class App extends React.Component {
         onSortEnd={this.onSortEnd}
         addToDashboard={this.addToDashboard}
         removeFromDashboard={this.removeFromDashboard}
+        checkDate={this.checkDate}
+        handleClaim={this.handleClaim}
+        handleAvail={this.handleAvail}
         />
       </section>
     );
