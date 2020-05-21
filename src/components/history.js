@@ -53,7 +53,7 @@ export default function History(props) {
       <Accordion.Content active={open === true}>
         <div className="history-content">
           <div className="history-image-container">
-            <img className={"history-image"} src={image_url} alt={name} />
+            <img className="history-image" src={image_url} alt={name} />
             <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
               <Modal.Content image>
                 <img className={"image-modal"} src={image_url} alt={name}/>
@@ -77,13 +77,13 @@ export default function History(props) {
             </div>
           </div>
           <p>{comment}</p>
-          <div className="card-details">
+          <div className="card-section">
             <div className="card-left">
               <p>Claimed: {claimed ? "Yes":"No"}</p>
             </div>
             <div className="card-right">
               {deleteButton ? <Button onClick={() => setShowDelete(!showDelete)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
-                <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "rgb(65, 204, 199)"}}>Delete</Button>}
+                <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "#E3655B", color: "white"}}>Delete</Button>}
               <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
                 <span style={{lineHeight: "0px"}}>Confirm</span>
               </Button>

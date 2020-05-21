@@ -11,6 +11,7 @@ body {
 #app, #root {
   display: flex;
   width: 100%;
+  
 }
 
 .navbar-close {
@@ -196,7 +197,7 @@ body {
 
 .ui.button {
   background-color: rgb(65, 204, 199);
-  width: 6rem;
+  /* width: 6rem; */
 }
 
 .field.post {
@@ -288,7 +289,7 @@ div.leaflet-top.leaflet-left {
 .header-bar {
   display: flex;
   justify-content: space-between;
-  width: 34%;
+  width: 36%;
   padding: 0 2rem;
 }
 
@@ -304,6 +305,8 @@ div.leaflet-top.leaflet-left {
 .leaflet-popup-content-wrapper {
   display: flex;
   flex-direction: column;
+  background: #333550;
+  color: white;
 }
 
 .leaflet-popup-content-wrapper h3 {
@@ -325,6 +328,7 @@ div.leaflet-top.leaflet-left {
 .popup-name {
   display: flex;
   justify-content: flex-start;
+  text-transform: capitalize;
 }
 
 .posted-by {
@@ -363,26 +367,12 @@ div.leaflet-top.leaflet-left {
   top: 2rem;
 }
 
-.popup p {
+.popup:last-child p {
   margin: 0 0 0.25rem 0;
 }
 
-.popup:last-child p {
-  margin: 0;
-}
-
-.item-one {
-  display: flex;
-  justify-content: space-around;
-  text-transform: capitalize;
-  text-align: left;
-}
-
-.item-two {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  text-align: right;
+.comment {
+  margin: 3px 3px
 }
 
 .title {
@@ -483,6 +473,12 @@ div.leaflet-top.leaflet-left {
   color: rgb(65, 204, 199);
 }
 
+.card-section {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+}
+
 .history-content {
   width: 18rem;
 }
@@ -493,11 +489,13 @@ div.leaflet-top.leaflet-left {
 
 .card-left {
   width: 60%;
+  text-align:left;
 }
 
 .card-right {
   display: flex;
   flex-direction: column;
+  text-align: right;
 }
 
 .card-item {
@@ -635,6 +633,7 @@ div.leaflet-top.leaflet-left {
   overflow-y: auto;
   display: flex;
   flex-direction: row;
+  transition: 200ms ease;
 }
 
 .dash-item {
@@ -648,12 +647,14 @@ div.leaflet-top.leaflet-left {
   display: flex;
   flex-direction: row;
   border-radius: 1px solid black;
+  transition: 200ms ease;
 }
 
 .dash-content {
   width: 50%;
   color: white;
   background-color: #333550;
+  padding: 5px
 }
 
 .dash-top {
@@ -682,7 +683,6 @@ div.leaflet-top.leaflet-left {
 }
 
 .dash-name {
-  padding: 0 5px;
   font-weight: 1000;
   font-size: 1.4rem;
   margin: 0;
@@ -700,7 +700,6 @@ div.leaflet-top.leaflet-left {
 .dash-datetime {
   display: flex;
   justify-content: space-between;
-  padding: 0 5px;
   margin: 2px 0;
   color: rgb(65, 204, 199);
   flex-direction: column;
@@ -708,8 +707,8 @@ div.leaflet-top.leaflet-left {
 }
 
 .dash-comment {
-  padding: 0 5px;
   margin: 2px 0;
+  padding: 0 5px;
 }
 
 .empty-dash {
@@ -726,11 +725,19 @@ div.leaflet-top.leaflet-left {
 }
 
 .active-div {
-  width: 100%;
+  width: 36%;
   display: flex;
   flex-wrap: wrap;
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  height: 90vh;
 }
 
 .username {
   color: rgb(225, 173, 173);
+}
+
+.error {
+  color: #E3655B;
 }

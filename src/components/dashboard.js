@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
-import { Modal, Icon } from 'semantic-ui-react'
+import { Modal, Icon, Button } from 'semantic-ui-react'
 
-export default function Dashboard({ items, dashboard, onSortEnd, removeFromDashboard }) {
+export default function Dashboard({ dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance }) {
+
+  const [badClaim, setBadClaim] = useState(false)
+  const [showClaim, setShowClaim] = useState(false)
+
+  const verifyClaim = (item) =>{
+    if(checkDistance(item) < 0.6){
+      handleClaim(item)
+    } else {
+      setBadClaim(true)
+    }
+  }
 
   const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="redriver"/>);
   const SortableItemContainer = sortableContainer(({ children }) => <div className="dash-container">{children}</div>);
@@ -33,6 +44,14 @@ export default function Dashboard({ items, dashboard, onSortEnd, removeFromDashb
       <p className="dash-comment">{item.comment}</p>
       <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
       <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
+      {!item.claimed ? 
+        <div className="claim-button">
+          <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
+          <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
+          {(badClaim && !showClaim) && <div className="error">You are too far to claim this!</div>}
+        </div>
+        :null
+      }
     </div>
   </div>)
 

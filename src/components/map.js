@@ -50,14 +50,16 @@ export default class MapContainer extends React.Component {
                       <img className={this.state.large ? "popup-image-large":"popup-image"} src={item.image_url} alt={item.name} onClick={() => this.setLarge()}/>
                     </div>
                     <p>{item.date} <strong>{item.time}</strong></p>
-                    <div className="item-one">
-                      <p>{item.street_address}, {item.city_address}, {item.state_address} {item.zip_address}</p>
-                      <div className="item-two">
+                    <div className="card-details">
+                      <div className="card-left">
+                        <span>{item.street_address}, {item.city_address}, {item.state_address} {item.zip_address}</span>
+                      </div>
+                      <div className="card-right">
                         <span>{item.quality}</span>
                         <span>{item.category}</span>
                       </div>
                     </div>
-                    <p>{item.comment}</p>
+                    <span className="comment">{item.comment}</span>
                     <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
                   </div>
                 </Popup>

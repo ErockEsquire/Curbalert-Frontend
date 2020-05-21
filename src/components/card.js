@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Modal, Icon, Label, Popup, Button } from 'semantic-ui-react'
 
-export default function Card({ user, item, checkDate, addToDashboard, handleClaim }) {
+export default function Card({ user, item, checkDate, checkDistance, addToDashboard, handleClaim, fetchLocation }) {
   const [open, setOpen] = useState(false)
+  const [badClaim, setBadClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
 
   const handleCard = () => {
     setShowClaim(false)
+    setBadClaim(false)
     setOpen(!open)
   }
 
@@ -20,6 +22,14 @@ export default function Card({ user, item, checkDate, addToDashboard, handleClai
       return <Label as='a' color='blue' tag>Active</Label>
     } else {
       return null
+    }
+  }
+
+  const verifyClaim = (item) =>{
+    if(checkDistance(item) < 0.6){
+      handleClaim(item)
+    } else {
+      setBadClaim(true)
     }
   }
 
@@ -62,10 +72,12 @@ export default function Card({ user, item, checkDate, addToDashboard, handleClai
           <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
           {!item.claimed ? 
             <div className="claim-button">
-              <Button onClick={() => setShowClaim(!showClaim)}>Claim</Button>
-              <div>{showClaim ? <Button onClick={() => {handleClaim(item);setShowClaim(false)}}>Yup!</Button>:null}</div>
+              <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
+              <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
+              {(badClaim && !showClaim) && <div className="error">You are too far to claim this!</div>}
             </div>
-            :null}
+            :null
+          }
         </div>
       </div>
     </div>

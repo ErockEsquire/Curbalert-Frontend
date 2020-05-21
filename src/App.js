@@ -9,6 +9,9 @@ class App extends React.Component {
   getTime = () => {
     let date = new Date()
     let minute = date.getMinutes()
+    if(minute < 10){
+      minute = "0" + minute
+    }
     let meridiem = "AM"
     let hour = date.getHours()
     if(hour > 12){
@@ -53,15 +56,36 @@ class App extends React.Component {
       time: this.getTime(),
       date: this.getDate(),
       image: null,
-      claimed: false,
+      preview: null,
+      claimed: false
     }
   }
 
   componentDidMount() {
+    this.fetchLocation()
+    this.fetchItems()
+  }
+
+  fetchItems = () => {
+    fetch(`http://localhost:3000/items`)
+    .then(response => response.json())
+    .then(items => {
+      let userItems = items.filter(item => item.users[0].id === this.state.user)
+      userItems = this.checkRecent(userItems)
+      let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
+      activeItems = this.checkRecent(activeItems)
+      this.setState({
+        ...this.state,
+        items: activeItems,
+        histories: userItems
+      }, () => console.log(this.state))
+    })
+  }
+
+  fetchLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {(this.geolocationCallback(position))}
     )
-    this.fetchItems()
   }
 
   geolocationCallback(position) {
@@ -74,18 +98,15 @@ class App extends React.Component {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       }
-    })
+    }, () => this.geoCodeLocation())
   }
 
-  // , () => this.geoCodeLocation()
 
   geoCodeLocation = () => {
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
       .then(r => r.json())
       .then(object => {
-        console.log(object)
         const address = object.results[0].formatted_address.split(', ')
-        console.log(address)
         this.setState(prevState => ({
           street_address: address[0],
           city_address: address[1],
@@ -99,32 +120,6 @@ class App extends React.Component {
             zip: address[2].split(' ')[1]
           }
         }))
-    })
-  }
-
-  fetchItems = () => {
-    fetch(`http://localhost:3000/items`)
-    .then(response => response.json())
-    .then(items => {
-      const userItems = items.filter(item => item.users[0].id === this.state.user)
-      let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
-      activeItems = this.checkRecent(activeItems)
-      this.setState({
-        ...this.state,
-        items: activeItems,
-        histories: userItems
-      }, () => console.log(this.state))
-    })
-  }
-
-  fetchHistories = () => {
-    fetch(`http://localhost:3000/${this.state.user}/items`)
-    .then(response => response.json())
-    .then(items => {
-      this.setState({
-        ...this.state,
-        histories: items.reverse()
-      })
     })
   }
 
@@ -149,14 +144,14 @@ class App extends React.Component {
   }
 
   checkRecent = (items) => {
-    let sorted = items.sort((a,b) => (this.checkDate(a.date) * 24 * 60) + (this.checkTime(a.time)) - (this.checkDate(b.date) * 24 * 60) + (this.checkTime(b.time)))
+    let sorted = items.sort((a,b) => ((this.checkDate(b.date) * 24 * 60) + (this.checkTime(b.time))) - ((this.checkDate(a.date) * 24 * 60) + (this.checkTime(a.time))))
     return sorted
   }
 
   checkDistance = (item) => {
     function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
-      const R = 6371; // Radius of the earth in km
-      const dLat = deg2rad(lat2-lat1);  // deg2rad below
+      const R = 6371;
+      const dLat = deg2rad(lat2-lat1);
       const dLng = deg2rad(lng2-lng1); 
       const a = 
         Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -164,7 +159,7 @@ class App extends React.Component {
         Math.sin(dLng/2) * Math.sin(dLng/2)
         ;
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-      const d = R * c; // Distance in km
+      const d = R * c;
       return d;
     }
 
@@ -199,30 +194,33 @@ class App extends React.Component {
   };
 
   handleClaim = (item) => {
-    if(this.checkDistance(item) < 0.5) {
-      item.claimed = true
-      fetch(`http://localhost:3000/items/${item.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          claimed: item.claimed
-        })
+    item.claimed = true
+    
+    fetch(`http://localhost:3000/items/${item.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        claimed: item.claimed
       })
-      .then(response => response.json())
-      .then(item => {
-        this.updateItem(item)
-        return true
-      })
-    } else {
-      return false
-    }
+    })
+    .then(response => response.json())
+    .then(item => {
+      this.updateItem(item)
+    })
   }
 
   updateItem = (newItem) => {
     let newItems = this.state.items.filter(item => item.id !== newItem.id)
+    let noUpdateItems = newItems.filter(item => item.users[0].id !== newItem.users[0].id)
+
+    let itemsToUpdate = newItems.filter(item => item.users[0].id === newItem.users[0].id)
+    let updateItems = itemsToUpdate.map(item => ({...item, users: newItem.users}))
+    
+    newItems = updateItems.concat(noUpdateItems)
+
     newItems.push(newItem)
     newItems = this.checkRecent(newItems)
     this.setState({ 
@@ -244,14 +242,15 @@ class App extends React.Component {
         ...this.state.form,
         [input]: value.value
       }
-    }, () => console.log(this.state))
+    })
   }
 
   handleUpload = (event) => {
     this.setState({
       form: {
         ...this.state.form,
-        image: event.target.files[0]
+        image: event.target.files[0],
+        preview: URL.createObjectURL(event.target.files[0])
       }
     })
   }
@@ -275,6 +274,7 @@ class App extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
+    URL.revokeObjectURL(this.state.form.preview)
 
     if(this.state.form.street !== this.state.street_address) {
       const street = this.state.form.street.replace(/ /g, '+')
@@ -340,17 +340,16 @@ class App extends React.Component {
             time: this.getTime(),
             date: this.getDate(),
             image: null,
+            preview: null,
             validation: 0,
             claimed: false,
             final: false,
-            ...this.state.form
           }
-        })
+        }, () => console.log(this.state))
       })
   }
 
   render() {
-
     return (
       <section id="app">
         <Navbar
@@ -383,6 +382,8 @@ class App extends React.Component {
         checkDate={this.checkDate}
         handleClaim={this.handleClaim}
         handleAvail={this.handleAvail}
+        fetchLocation={this.fetchLocation}
+        checkDistance={this.checkDistance}
         />
       </section>
     );

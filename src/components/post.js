@@ -19,7 +19,7 @@ export default class Post extends React.Component {
 
   render() {
     const { tab, handleClick, handleChange, handleUpload, handleSubmit } = this.props
-    const { name, street, city, state, zip, comment, quality } = this.props.form
+    const { name, street, city, state, zip, comment, quality, preview } = this.props.form
     return (
       <div className={tab ? "postbar-open":"postbar-close"}>
         <div className={tab ? "post-open":"post-close"}>
@@ -33,9 +33,10 @@ export default class Post extends React.Component {
                 <Form.Input placeholder="Name of item*" name="name" value={name} onChange={handleChange} maxLength="20"/>
                 <label>Image</label>
                 <input className="field" type="file" name="image" onChange={handleUpload}/>
+                {preview !== null ? <img className="history-image" src={preview} alt="upload"/>:null}
                 <div className="form-address">
                   <Form.Input placeholder="Street Address*" name="street" value={street} onChange={handleChange}/>
-                  <Form.Input placeholder="City*" name="city" value={city} onChange={handleChange} maxLength="20" style={{width: '7rem', color: 'white'}}/>
+                  <Form.Input placeholder="City*" name="city" value={city} onChange={handleChange} maxLength="16" style={{width: '7rem', color: 'white'}}/>
                   <Form.Input placeholder="State*" name="state" value={state} onChange={handleChange} maxLength="2" style={{width: '5rem', color: 'white'}}/>
                   <Form.Input placeholder="Zip" name="zip" value={zip} onChange={handleChange} maxLength="5" style={{width: '5rem', color: 'white'}}/>
                 </div>
