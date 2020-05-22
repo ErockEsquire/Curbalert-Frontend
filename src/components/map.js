@@ -1,11 +1,12 @@
 import React from 'react';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
 import { Icon } from 'semantic-ui-react'
+import { decode } from 'polyline-encoded'
 
 export default class MapContainer extends React.Component {
   state = {
     zoom: 15,
-    large: false
+    large: false,
   }
 
   setLarge = () => {
@@ -16,8 +17,9 @@ export default class MapContainer extends React.Component {
   }
 
   render() {
-    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard } = this.props
+    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard, fetchDirections } = this.props
     const position = [currentLat, currentLong]
+    // () => addToDashboard(item)
     return (
 
       <div className="map-container">
@@ -38,11 +40,11 @@ export default class MapContainer extends React.Component {
 
           {items.length > 0 ?
             items.map(item => {
-              return <Marker key={item.id} position={[item.latitude, item.longitude]}>
+              return <Marker key={item.id} id={item.id} position={[item.latitude, item.longitude]}>
                 <Popup>
                   <div className="popup">
                     <div className="popup-name">
-                      <Icon className="popup" name="add square" onClick={() => addToDashboard(item)}/>
+                      <Icon className="popup" name="add square" onClick={() => fetchDirections(item)}/>
                       <h3>{item.name}</h3>
                     </div>
                     <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>

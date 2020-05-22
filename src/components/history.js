@@ -40,7 +40,7 @@ export default function History(props) {
   return (
     <Accordion inverted>
       <Accordion.Title onClick={() => setOpen(!open)}>
-        <div className="history-title">
+        <div className="history-name">
           <p>{name}</p>
         </div>
         <div className="history-datetime">

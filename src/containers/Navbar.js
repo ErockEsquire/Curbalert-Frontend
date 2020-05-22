@@ -21,7 +21,7 @@ const Username = (props) => {
 }
 
 export default function Navbar(props) {
-  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete } = props
+  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, searchHistory, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete, handleSearchHistory } = props
   
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(false);
@@ -67,9 +67,11 @@ export default function Navbar(props) {
       tab={history} 
       checkDate={checkDate}
       histories={histories}
+      searchHistory={searchHistory}
       addToDashboard={addToDashboard}  
       handleClick={setHistory} 
       handleDelete={handleDelete}
+      handleSearchHistory={handleSearchHistory}
       />
     </nav>
   )

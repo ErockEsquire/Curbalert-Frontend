@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { Modal, Icon, Label, Popup, Button } from 'semantic-ui-react'
+import UIfx from 'uifx';
+import Sound from '../sounds/switch-click.mp3'
 
 export default function Card({ user, item, checkDate, checkDistance, addToDashboard, handleClaim, fetchLocation }) {
   const [open, setOpen] = useState(false)
   const [badClaim, setBadClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
+
+  const switchClick = new UIfx(Sound);
 
   const handleCard = () => {
     setShowClaim(false)
@@ -46,7 +50,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
           position='right center'
           content='Add to Dashboard'
           size='tiny'
-          trigger={<Icon className="from-active" name="add square" onClick={() => addToDashboard(item)}/>}
+          trigger={<Icon className="from-active" name="add square" onClick={() => {addToDashboard(item); switchClick.play()}}/>}
         />
       </div>
       <div className="active-header" onClick={() => handleCard()}>
@@ -70,7 +74,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
           <p className="dash-comment">{item.comment}</p>
           <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
           <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
-          {!item.claimed ? 
+          {user.id === item.users[0].id && !item.claimed ? 
             <div className="claim-button">
               <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
               <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>

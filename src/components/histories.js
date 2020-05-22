@@ -4,20 +4,10 @@ import History from './history'
 
 export default class Histories extends React.Component {
 
-  state = {
-    searchTerm: ""
-  }
-
-  handleSearch = (event) => {
-    this.setState({
-      searchTerm: event.target.value
-    })
-  }
-
   filterHistories = (histories) => {
     return histories.filter(history => {
       return Object.keys(history).some(key => {
-        return typeof history[key] === 'string' && history[key].toLowerCase().includes(this.state.searchTerm.toLowerCase())})
+        return typeof history[key] === 'string' && history[key].toLowerCase().includes(this.props.searchHistory.toLowerCase())})
     })
   }
 
@@ -26,7 +16,7 @@ export default class Histories extends React.Component {
   }
   
   render() {
-    const { tab, handleClick } = this.props
+    const { tab, searchHistory, handleClick, handleSearchHistory } = this.props
 
     return (
       <div className={tab ? "postbar-open":"postbar-close"}>
@@ -39,8 +29,8 @@ export default class Histories extends React.Component {
             <input
             className="prompt"
             placeholder="Search History"
-            value={this.state.searchTerm}
-            onChange={this.handleSearch}
+            value={searchHistory}
+            onChange={handleSearchHistory}
             />
             <i className="search icon" />
           </div>

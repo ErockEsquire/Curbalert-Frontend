@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import { Modal, Icon, Button } from 'semantic-ui-react'
 
-export default function Dashboard({ dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance }) {
+export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance }) {
 
   const [badClaim, setBadClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
@@ -44,7 +44,7 @@ export default function Dashboard({ dashboard, onSortEnd, removeFromDashboard, h
       <p className="dash-comment">{item.comment}</p>
       <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
       <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
-      {!item.claimed ? 
+      {user.id === item.users[0].id && !item.claimed ? 
         <div className="claim-button">
           <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
           <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
@@ -60,7 +60,7 @@ export default function Dashboard({ dashboard, onSortEnd, removeFromDashboard, h
   }
 
   return(
-    <div className="dashboard">
+    <div className="dashboard-div">
       <SortableItemContainer axis="y" onSortEnd={onSortEnd} useDragHandle>
         {dashboard.length > 0 ? renderDashboard():
         <div className="empty-dash">

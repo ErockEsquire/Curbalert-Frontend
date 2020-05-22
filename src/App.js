@@ -42,6 +42,8 @@ class App extends React.Component {
     city_address: "",
     state_address: "",
     zip_address: "",
+    searchHistory: "",
+    searchActive: "",
     form: {
       name: "",
       category: "",
@@ -72,8 +74,10 @@ class App extends React.Component {
     .then(items => {
       let userItems = items.filter(item => item.users[0].id === this.state.user)
       userItems = this.checkRecent(userItems)
+      console.log(userItems)
       let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
       activeItems = this.checkRecent(activeItems)
+      console.log(activeItems)
       this.setState({
         ...this.state,
         items: activeItems,
@@ -98,30 +102,63 @@ class App extends React.Component {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       }
-    }, () => this.geoCodeLocation())
-  }
-
-
-  geoCodeLocation = () => {
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
-      .then(r => r.json())
-      .then(object => {
-        const address = object.results[0].formatted_address.split(', ')
-        this.setState(prevState => ({
-          street_address: address[0],
-          city_address: address[1],
-          state_address: address[2].split(' ')[0],
-          zip_address: address[2].split(' ')[1],
-          form: {
-            ...prevState.form,
-            street: address[0],
-            city: address[1],
-            state: address[2].split(' ')[0],
-            zip: address[2].split(' ')[1]
-          }
-        }))
     })
   }
+
+  // , () => this.geoCodeLocation()
+
+  geoCodeLocation = () => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
+    .then(r => r.json())
+    .then(object => {
+      const address = object.results[0].formatted_address.split(', ')
+      this.setState(prevState => ({
+        street_address: address[0],
+        city_address: address[1],
+        state_address: address[2].split(' ')[0],
+        zip_address: address[2].split(' ')[1],
+        form: {
+          ...prevState.form,
+          street: address[0],
+          city: address[1],
+          state: address[2].split(' ')[0],
+          zip: address[2].split(' ')[1]
+        }
+      }))
+    })
+  }
+
+  fetchDirections = (item) => {
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {(geolocationCall(position, item))}
+    )
+
+    const geolocationCall = (position, item) => {
+      // console.log(position)
+      // const lat = position.coords.latitude
+      // const lng = position.coords.longitude
+      // console.log(lat, lng)
+      console.log(item)
+      this.setState({
+        ...this.state,
+        currentLat: position.coords.latitude,
+        currentLong: position.coords.longitude,
+        form: {
+          ...this.state.form,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+      }, () => directionsCall(item))
+    }
+
+    const directionsCall = () => {
+      fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&key=${process.env.REACT_APP_GOOGLE_API}`)
+      .then(r => r.json())
+      .then(object => console.log(object))
+    }
+  }
+
 
   checkDate = (date) => {
     const date1 = new Date(date);
@@ -144,7 +181,7 @@ class App extends React.Component {
   }
 
   checkRecent = (items) => {
-    let sorted = items.sort((a,b) => ((this.checkDate(b.date) * 24 * 60) + (this.checkTime(b.time))) - ((this.checkDate(a.date) * 24 * 60) + (this.checkTime(a.time))))
+    let sorted = items.sort((a,b) => (((this.checkDate(a.date)) * 1440) - (this.checkTime(a.time)) - (((this.checkDate(b.date)) * 1440) - (this.checkTime(b.time))) ))
     return sorted
   }
 
@@ -225,6 +262,18 @@ class App extends React.Component {
     newItems = this.checkRecent(newItems)
     this.setState({ 
       items: newItems
+    })
+  }
+
+  handleSearchHistory = (event) => {
+    this.setState({
+      searchHistory: event.target.value
+    })
+  }
+
+  handleSearchActive = (event) => {
+    this.setState({
+      searchActive: event.target.value
     })
   }
 
@@ -360,11 +409,13 @@ class App extends React.Component {
         form={this.state.form}
         latitude={this.state.currentLat}
         longitude={this.state.currentLong}
+        searchHistory={this.state.searchHistory}
         addToDashboard={this.addToDashboard}
         handleChange={this.handleChange}
         handleUpload={this.handleUpload}
         handleSubmit={this.handleSubmit}
         handleDelete={this.handleDelete}
+        handleSearchHistory={this.handleSearchHistory}
         />
         <Main
         user={this.state.user} 
@@ -382,8 +433,11 @@ class App extends React.Component {
         checkDate={this.checkDate}
         handleClaim={this.handleClaim}
         handleAvail={this.handleAvail}
+        handleSearchActive={this.handleSearchActive}
+        searchActive={this.state.searchActive}
         fetchLocation={this.fetchLocation}
         checkDistance={this.checkDistance}
+        fetchDirections={this.fetchDirections}
         />
       </section>
     );
