@@ -3,7 +3,7 @@ import Map from '../components/map'
 import Dashboard from '../components/dashboard'
 import Active from '../components/active'
 
-export default function Main({ user, currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard, checkDate, handleClaim, handleAvail, handleSearchActive, searchActive, fetchLocation, checkDistance, fetchDirections }) {
+export default function Main({ user, currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard, checkDate, handleClaim, handleAvail, handleSearchActive, searchActive, fetchLocation, checkDistance, fetchDirections, polyline, route, routeId }) {
 
   const [dash, setDash] = useState(false)
   return (
@@ -27,10 +27,11 @@ export default function Main({ user, currentLat, currentLong, items, dashboard, 
         addToDashboard={addToDashboard}
         fetchLocation={fetchLocation} 
         checkDistance={checkDistance}
-        fetchDirections={fetchDirections}
+        polyline={polyline}
+        route={route}
         />
         <section className="section">
-          {dash ? <Dashboard user={user} dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance}/>:
+          {dash ? <Dashboard user={user} dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance} fetchDirections={fetchDirections} route={route} routeId={routeId}/>:
           <Active user={user} items={items} checkDate={checkDate} addToDashboard={addToDashboard} handleClaim={handleClaim} handleAvail={handleAvail} handleSearchActive={handleSearchActive} searchActive={searchActive} fetchLocation={fetchLocation} checkDistance={checkDistance}/>}
         </section>
       </section>

@@ -3,7 +3,7 @@
 }
 
 body {
-  background-image: url('./images/tokyo-night.jpg');
+  background-image: url('./images/dune-rotatedclock.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -59,7 +59,7 @@ body {
 }
 
 .nav-tab:hover {
-  color: rgb(225, 173, 173);
+  color: rgb(252, 251, 250);
   background: rgb(0, 0, 0);
   transition: 600ms ease;
   cursor: pointer;
@@ -155,7 +155,7 @@ body {
 }
 
 .xicon:hover {
-  color: rgb(225, 173, 173);
+  color: rgb(252, 251, 250);
   transition: 600ms;
   cursor: pointer;
 }
@@ -196,8 +196,7 @@ body {
 }
 
 .ui.button {
-  background-color: rgb(65, 204, 199);
-  /* width: 6rem; */
+  background-color: #EF476F;
 }
 
 .field.post {
@@ -323,8 +322,8 @@ div.leaflet-top.leaflet-left {
 .leaflet-popup-content-wrapper {
   display: flex;
   flex-direction: column;
-  background: #414361;
-  color: white;
+  background: #EADEDA;
+  color: #2D3142;
 }
 
 .leaflet-popup-content-wrapper h3 {
@@ -459,11 +458,22 @@ div.leaflet-top.leaflet-left {
   position: relative;
 }
 
+.history-details {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+  color: white;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
 .search.plus.icon {
   position: absolute;
   font-size: 1.5rem;
   left: 4px;
   top: 8px;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
 }
 
 .add.square.icon.from-history {
@@ -471,10 +481,14 @@ div.leaflet-top.leaflet-left {
   font-size: 1.5rem;
   right: 4px;
   top: 8px;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
 }
 
 .add.square.icon.popup {
   font-size: 1.1rem;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
 }
 
 .image-modal {
@@ -492,7 +506,9 @@ div.leaflet-top.leaflet-left {
   display: flex;
   justify-content: space-between;
   text-transform: capitalize;
-  color: rgb(65, 204, 199);
+  color: #2D3142;
+  font-weight: bold;
+  margin-top: 2px;
 }
 
 .card-section {
@@ -520,22 +536,22 @@ div.leaflet-top.leaflet-left {
   text-align: right;
 }
 
-.card-item {
+.active-item {
   margin: 0.5rem;
   border-radius: 6px;
   height: fit-content;
-  background-color: #414361;
-  color: white;
+  background-color: rgb(2, 128, 144);
+  color: #2D3142;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, .5);
 }
 
-.card-image-container {
+.active-image-container {
   position: relative;
   border-radius: 6px;
   overflow: hidden;
 }
 
-.card-image-container:hover,
+.active-image-container:hover,
 .active-header:hover,
 .dash-drag:hover,
 .search.plus.icon:hover,
@@ -543,22 +559,36 @@ div.leaflet-top.leaflet-left {
   cursor:pointer;
 }
 
-.card-image {
+.active-image {
   width: 100%;
   height: 14vw;
   object-fit: cover;
 }
 
-.card-content-close {
+.active-header {
+  background-color: rgb(68, 159, 175);
+  text-transform: capitalize;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 6px 6px;
+  padding: 0 5px 5px 5px;
+}
+
+.active-name {
+  font-weight: 1000;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.active-content-close {
   height: 0;
-  background-color: #333550;
+  background-color: rgb(2, 128, 144);
   border-radius: 6px;
 }
 
-.card-content-open {
+.active-content-open {
   height: fit-content;
   transition: all 400ms ease;
-  background-color: #333550;
+  background-color: rgb(2, 128, 144);
   border-radius: 6px;
   padding-bottom: 0.5rem;
 }
@@ -574,22 +604,7 @@ div.leaflet-top.leaflet-left {
 
 .claim-button {
   display: flex;
-}
-
-.active-header {
-  background-color: #414361;
-  text-transform: capitalize;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
-  text-shadow: 1px 1px 3px black;
-  border-radius: 6px;
-  padding: 0 5px 5px 5px;
-}
-
-
-.active-name {
-  font-weight: 1000;
-  font-size: 1.4rem;
-  margin: 0;
+  justify-content: center;
 }
 
 .add.square.icon.from-active {
@@ -597,6 +612,8 @@ div.leaflet-top.leaflet-left {
   font-size: 1.5rem;
   right: 0px;
   top: 5px;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
 }
 
 .ui.icon.input>input {
@@ -654,10 +671,11 @@ div.leaflet-top.leaflet-left {
 .dash-item:first-child {
   height: 18rem;
   width: 100%;
-  overflow-y: auto;
   display: flex;
   flex-direction: row;
+  overflow-y: scroll;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, .8);
+  scrollbar-width: thin;
 }
 
 .dash-item {
@@ -665,7 +683,7 @@ div.leaflet-top.leaflet-left {
   width: 49%;
   margin-bottom: 1rem;
   border-radius: 6px;
-  background-color: #333550;
+  background-color: #EADEDA;
   overflow: hidden;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, .5);
   display: flex;
@@ -673,16 +691,55 @@ div.leaflet-top.leaflet-left {
   border-radius: 1px solid black;
 }
 
+.dash-image {
+  width: 50%;
+  height: 100%;
+  top: 0;
+  position: sticky;
+  object-fit: cover;
+}
+
 .dash-content {
   width: 50%;
-  color: white;
-  background-color: #333550;
-  padding: 5px
+  color: #2D3142;
+  background-color: #EADEDA;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dash-head {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  padding: 5px;
 }
 
 .dash-top {
   display: flex;
   justify-content: space-between;
+}
+
+.dash-body {
+  width: 100%;
+  height: auto;
+}
+
+.claim-details {
+  display: flex;
+  justify-content: space-between;
+  text-transform: capitalize;
+  color: #2D3142;
+  font-weight: bold;
+  margin: 2px 2px 10px 2px;
+  text-align: center
+}
+
+.congrats {
+  text-align: left;
+  color: #EADEDA;
+  font-weight: bold;
+  text-shadow: 2px 2px 2px #F45B69;
 }
 
 .dash-drag-container {
@@ -691,16 +748,19 @@ div.leaflet-top.leaflet-left {
   flex-direction: column;
 }
 
-.redriver.icon.dash-drag {
+.angle.double.up.icon.dash-drag {
   margin: 0;
   font-size: 1.5rem;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
+  transform: rotate(-45deg);
 }
 
 .remove.icon.dash-drag {
   margin: auto;
   font-size: 1.3rem;
-  background-color: white;
-  color: black;
+  color: white;
+  text-shadow: 1px 1px 2px #2D3142;
   border-radius: 4px;
   width: 18px;
 }
@@ -712,21 +772,66 @@ div.leaflet-top.leaflet-left {
   text-transform: capitalize;
 }
 
-.dash-image {
-  width: 50%;
-  height: 100%;
-  top: 0;
-  position: sticky;
-  object-fit: cover;
+
+.dash-tab-active {
+  background: rgb(102, 168, 180);
+  padding: 5px;
+  min-height: 99px
+}
+
+.dash-tab-inactive {
+  display: none;
 }
 
 .dash-datetime {
   display: flex;
   justify-content: space-between;
   margin: 2px 0;
-  color: rgb(65, 204, 199);
   flex-direction: column;
   text-transform: capitalize;
+  font-weight: bold;
+}
+
+.dash-direction-mode {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 5px 0 7px 0;
+}
+
+.dash-direction-mode svg {
+  cursor: pointer;
+}
+
+.mode-highlight {
+  background: #028090;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  box-shadow: 1px 1px 4px;
+}
+
+.directions-icon-walking {
+  width: 1.2rem;
+}
+
+.directions-icon-transit {
+  width: 1.5rem;
+}
+
+.directions-icon-driving {
+  width: 2.1rem;
+}
+
+.dash-directions {
+  justify-content: center;
+  display: flex;
+}
+
+.dash-claim {
+  display: flex;
+  flex-direction: column;
 }
 
 .dash-comment {
@@ -738,6 +843,27 @@ div.leaflet-top.leaflet-left {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.tab {
+  display: flex;
+  position: relative;
+}
+
+.tab-pane-active {
+  background: rgb(102, 168, 180);
+  padding: 6px;
+  border-radius: 9px 9px 0 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tab-pane-inactive {
+  background: rgb(2, 128, 144);
+  padding: 6px;
+  border-radius: 9px 9px 0 0;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .empty {
@@ -752,8 +878,8 @@ div.leaflet-top.leaflet-left {
 }
 
 .active-search {
-  background-color:rgba(65, 204, 199, 0.6);
-  border-radius: 10px;
+  background-color:rgba(255, 255, 255, 0.6);
+  border-radius: 10px 10px 3px 3px;
 }
 
 .active-container {
@@ -778,11 +904,18 @@ div.leaflet-top.leaflet-left {
 }
 
 .username {
-  color: rgb(225, 173, 173);
+  color: rgb(230, 124, 124);
+  text-shadow: 1px 1px 1px #2D3142;
+}
+
+.star.icon {
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 1px #2D3142;
 }
 
 .error {
   color: #E3655B;
+  text-shadow: 1px 1px 1px #2D3142;
 }
 
 .ui.page.modals.dimmer.transition.visible.active {
@@ -802,4 +935,33 @@ div.leaflet-top.leaflet-left {
   to {
     background-position: 200% 0;
   }
+}
+
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+#user {
+  color: #EB5E55;
+  font-size: 2.5rem;
+  bottom: 1.25rem;
+  position:relative;
+}
+
+#item {
+  color: #00BFB3;
+  font-size: 2.5rem;
+  bottom: 1.25rem;
+  position:relative;
+}
+
+#map-dot {
+  color: rgb(50, 141, 194);
+  position:relative;
+}
+
+.step-details {
+  display: flex;
+  justify-content: space-between;
 }

@@ -44,6 +44,9 @@ class App extends React.Component {
     zip_address: "",
     searchHistory: "",
     searchActive: "",
+    polyline: [],
+    route: [],
+    routeId: 0,
     form: {
       name: "",
       category: "",
@@ -74,12 +77,9 @@ class App extends React.Component {
     .then(items => {
       let userItems = items.filter(item => item.users[0].id === this.state.user)
       userItems = this.checkRecent(userItems)
-      console.log(userItems)
       let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
       activeItems = this.checkRecent(activeItems)
-      console.log(activeItems)
       this.setState({
-        ...this.state,
         items: activeItems,
         histories: userItems
       }, () => console.log(this.state))
@@ -94,7 +94,6 @@ class App extends React.Component {
 
   geolocationCallback(position) {
     this.setState({
-      ...this.state,
       currentLat:position.coords.latitude,
       currentLong:position.coords.longitude,
       form: {
@@ -106,7 +105,7 @@ class App extends React.Component {
   }
 
   // , () => this.geoCodeLocation()
-
+  
   geoCodeLocation = () => {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
     .then(r => r.json())
@@ -128,20 +127,15 @@ class App extends React.Component {
     })
   }
 
-  fetchDirections = (item) => {
+  fetchDirections = (item, mode) => {
+    var polyUtil = require('polyline-encoded');
     
     navigator.geolocation.getCurrentPosition(
-      (position) => {(geolocationCall(position, item))}
+      (position) => {(geolocationCall(position))}
     )
 
-    const geolocationCall = (position, item) => {
-      // console.log(position)
-      // const lat = position.coords.latitude
-      // const lng = position.coords.longitude
-      // console.log(lat, lng)
-      console.log(item)
+    const geolocationCall = (position) => {
       this.setState({
-        ...this.state,
         currentLat: position.coords.latitude,
         currentLong: position.coords.longitude,
         form: {
@@ -149,16 +143,25 @@ class App extends React.Component {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }
-      }, () => directionsCall(item))
+      }, () => directionsCall())
     }
 
     const directionsCall = () => {
-      fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&key=${process.env.REACT_APP_GOOGLE_API}`)
+      fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`)
       .then(r => r.json())
-      .then(object => console.log(object))
+      .then(object => {
+        console.log(object)
+        let encoded = object.routes[0].overview_polyline.points
+        let polyline = polyUtil.decode(encoded)
+        console.log(polyline)
+        this.setState({
+          polyline: polyline,
+          route: object.routes[0],
+          routeId: item.id
+        })
+      })
     }
   }
-
 
   checkDate = (date) => {
     const date1 = new Date(date);
@@ -218,14 +221,12 @@ class App extends React.Component {
   removeFromDashboard = (itemId) => {
     const dash = this.state.dashboard.filter(item => item.id !== itemId)
     this.setState({
-      ...this.state,
       dashboard: dash
     })
   }
 
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState(({dashboard}) => ({
-      ...this.state,
       dashboard: arrayMove(dashboard, oldIndex, newIndex),
     }));
   };
@@ -281,7 +282,7 @@ class App extends React.Component {
     this.setState({
       items: [item, ...this.state.items],
       histories: [item, ...this.state.histories]
-    }, () => console.log(this.state))
+    })
   }
 
   handleChange = (event, value) => {
@@ -313,7 +314,6 @@ class App extends React.Component {
           const items = this.state.items.filter(item => item.id !== itemId)
           const histories = this.state.histories.filter(history => history.id !== itemId)
           this.setState({
-            ...this.state,
             items: items,
             histories: histories
           })
@@ -394,7 +394,7 @@ class App extends React.Component {
             claimed: false,
             final: false,
           }
-        }, () => console.log(this.state))
+        })
       })
   }
 
@@ -438,6 +438,9 @@ class App extends React.Component {
         fetchLocation={this.fetchLocation}
         checkDistance={this.checkDistance}
         fetchDirections={this.fetchDirections}
+        polyline={this.state.polyline}
+        route={this.state.route}
+        routeId={this.state.routeId}
         />
       </section>
     );

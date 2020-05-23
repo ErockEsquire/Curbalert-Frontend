@@ -1,12 +1,17 @@
 import React from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
+import { Map, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
 import { Icon } from 'semantic-ui-react'
-import { decode } from 'polyline-encoded'
+import UIfx from 'uifx';
+import Sound from '../sounds/switch-click.mp3'
+import { divIcon } from 'leaflet';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+const switchClick = new UIfx(Sound);
 
 export default class MapContainer extends React.Component {
   state = {
     zoom: 15,
-    large: false,
+    large: false
   }
 
   setLarge = () => {
@@ -16,20 +21,45 @@ export default class MapContainer extends React.Component {
     })
   }
 
+  renderSteps = ({ route }) => {
+    const steps = route.legs[0].steps
+    return steps.map(step => {
+        return <Marker position={step.end_location}>
+          <Popup>
+          <div className="popup">
+            <div className="step-details">
+              <span>{step.distance}</span>
+              <span>{step.duration}</span>
+            </div>
+            <span className="comment">{step.html_instructions}</span>
+          </div>
+          </Popup>
+        </Marker>
+      })
+  }
+
   render() {
-    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard, fetchDirections } = this.props
+    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard, polyline, route } = this.props
     const position = [currentLat, currentLong]
-    // () => addToDashboard(item)
+
+    const pinU = renderToStaticMarkup(<i id="user" class="fas fa-map-pin"></i>)
+    const pinI = renderToStaticMarkup(<i id="item" class="fas fa-map-pin"></i>)
+    const dot = renderToStaticMarkup(<i id="map-dot" class="fas fa-circle"></i>)
+    const pinUser = divIcon({ html: pinU });
+    const pinItem = divIcon({ html: pinI });
+    const mapDot = divIcon({ html: dot });
+    
+    console.log(route)
     return (
 
       <div className="map-container">
         <Map className="map" center={position} zoom={this.state.zoom} 
-        style={{display: "inline-block", margin:"0 0.5rem", height: "87.5vh", width: "58vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
+        style={{display: "inline-block", margin:"0 0.5rem", height: "87.5vh", width: "57vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           />
-          <Marker position={position}>
+          <Marker icon={pinUser} position={position}>
             <Popup>
               <div className="popup">
                 <h4>{street}, {city}, {state} {zip}</h4>
@@ -38,13 +68,19 @@ export default class MapContainer extends React.Component {
             </Popup>
           </Marker>
 
-          {items.length > 0 ?
+          {route.length > 0 && this.renderSteps()}
+
+          {polyline.length > 0 &&
+            <Polyline positions={polyline}/>
+          }
+
+          {items.length > 0 &&
             items.map(item => {
-              return <Marker key={item.id} id={item.id} position={[item.latitude, item.longitude]}>
+              return <Marker key={item.id} icon={pinItem} id={item.id} position={[item.latitude, item.longitude]}>
                 <Popup>
                   <div className="popup">
                     <div className="popup-name">
-                      <Icon className="popup" name="add square" onClick={() => fetchDirections(item)}/>
+                      <Icon className="popup" name="add square" onClick={() => {addToDashboard(item);switchClick.play()}}/>
                       <h3>{item.name}</h3>
                     </div>
                     <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
@@ -66,7 +102,7 @@ export default class MapContainer extends React.Component {
                   </div>
                 </Popup>
               </Marker>
-            }):null
+            })
           }
         </Map>
       </div>

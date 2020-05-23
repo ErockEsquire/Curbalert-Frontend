@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Accordion, Icon, Label, Button, Modal, Popup } from 'semantic-ui-react'
+import UIfx from 'uifx';
+import Sound from '../sounds/switch-click.mp3'
 
 export default function History(props) {
 
@@ -19,6 +21,7 @@ export default function History(props) {
     id
   } = props.history
 
+  const switchClick = new UIfx(Sound);
   const { checkDate, addToDashboard, handleDelete } = props
   const [open, setOpen] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -28,9 +31,9 @@ export default function History(props) {
     const days = checkDate(date)
     if(days <= 1) {
       return <Label as='a' color='red' tag>Active</Label>
-    } else if(days === 2) {
+    } else if(days <= 2) {
       return <Label as='a' color='orange' tag>Active</Label>
-    } else if(days === 3) {
+    } else if(days <= 3) {
       return <Label as='a' color='blue' tag>Active</Label>
     } else {
       return null
@@ -63,11 +66,11 @@ export default function History(props) {
               position='right center'
               content='Add to Dashboard' 
               size='tiny' 
-              trigger={<Icon className="from-history" name="add square" onClick={() => addToDashboard(props.history)}/>}
+              trigger={<Icon className="from-history" name="add square" onClick={() => {addToDashboard(props.history); switchClick.play()}}/>}
             />
           </div>
 
-          <div className="card-details">
+          <div className="history-details">
             <div className="card-left">
               <span>{street_address}, {city_address}, {state_address} {zip_address} </span>
             </div>
@@ -83,7 +86,7 @@ export default function History(props) {
             </div>
             <div className="card-right">
               {deleteButton ? <Button onClick={() => setShowDelete(!showDelete)} onMouseLeave={() => setDeleteButton(false)}>Sure?</Button>:
-                <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "#E3655B", color: "white"}}>Delete</Button>}
+                <Button onMouseEnter={() => setDeleteButton(true)} onMouseLeave={() => setDeleteButton(false)} style={{backgroundColor: "#F45B69", color: "white"}}>Delete</Button>}
               <Button inverted color="red" onClick={() => handleDelete(id)} onMouseLeave={() => setShowDelete(false)} style={showDelete ? {visibility:"visible"}:{visibility:"hidden"}}>
                 <span style={{lineHeight: "0px"}}>Confirm</span>
               </Button>
