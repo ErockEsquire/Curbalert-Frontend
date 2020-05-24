@@ -555,7 +555,9 @@ div.leaflet-top.leaflet-left {
 .active-header:hover,
 .dash-drag:hover,
 .search.plus.icon:hover,
-.add.square.icon:hover {
+.add.square.icon:hover,
+.more-details,
+.dash-more-details {
   cursor:pointer;
 }
 
@@ -772,24 +774,41 @@ div.leaflet-top.leaflet-left {
   text-transform: capitalize;
 }
 
-
 .dash-tab-active {
   background: rgb(102, 168, 180);
-  padding: 5px;
-  min-height: 99px
+  min-height: 99px;
+  padding: 5px 0;
 }
 
 .dash-tab-inactive {
   display: none;
 }
 
-.dash-datetime {
+.dash-distance-duration {
   display: flex;
   justify-content: space-between;
-  margin: 2px 0;
+  margin: 8px 6px 4px 6px;
   flex-direction: column;
   text-transform: capitalize;
   font-weight: bold;
+}
+
+.dash-step {
+  padding: 4px;
+}
+
+.dash-details {
+  padding: 0 5px;
+  min-height: 99px;
+}
+
+.dash-more-details {
+  background-color:rgb(111, 187, 201);
+  padding: 4px 10px;
+}
+
+.dash-transit-details {
+  margin: 4px 8px;
 }
 
 .dash-direction-mode {
@@ -824,14 +843,32 @@ div.leaflet-top.leaflet-left {
   width: 2.1rem;
 }
 
+.dash-directions-button {
+  display: flex;
+  margin: 0 auto;
+}
+
+.dash-datetime {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+  flex-direction: column;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
 .dash-directions {
   justify-content: center;
   display: flex;
+  flex-direction: column;
+  min-height: 99px;
 }
 
-.dash-claim {
+.dash-claims {
   display: flex;
   flex-direction: column;
+  padding: 0 5px;
+  min-height: 99px;
 }
 
 .dash-comment {
@@ -956,12 +993,43 @@ div.leaflet-top.leaflet-left {
   position:relative;
 }
 
-#map-dot {
-  color: rgb(50, 141, 194);
+#step {
+  color: rgb(47, 147, 206);
+  font-size: 2rem;
+  bottom: 1rem;
   position:relative;
 }
 
-.step-details {
+.step-distance-duration {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+}
+
+.instructions {
+  font-weight: bold;
+}
+
+.transit-details > * {
+  text-align: left;
+  margin: 5px;
+}
+
+.transit-details {
+  margin-bottom: 5px;
+}
+
+.more-details:hover {
+  cursor: pointer;
+}
+
+.direction-details {
+  margin: 1px 6px;
+}
+
+.transit-details img {
+  font-size: .85rem;
+}
+
+.directions p {
+  margin: 0;
 }

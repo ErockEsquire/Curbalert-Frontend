@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Map, Marker, Popup, TileLayer, Polyline } from 'react-leaflet'
 import { Icon } from 'semantic-ui-react'
 import UIfx from 'uifx';
@@ -8,10 +8,26 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 const switchClick = new UIfx(Sound);
 
+const DirectionSteps = ({ steps }) => {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="more-details" onClick={() => setOpen(!open)}>
+      <Icon name={open ? 'caret down':'caret right'}/>
+      <span>More Details</span>
+        {open && <div className="direction-details">
+          {steps.map(step => {
+            return <p><Icon name="angle double right"/>{step.html_instructions.replace(/(<([^>]+)>)/ig,"")} (<strong>{step.distance.text}</strong>)</p>
+          })}
+        </div>}
+    </div>
+  )
+}
+
 export default class MapContainer extends React.Component {
   state = {
     zoom: 15,
-    large: false
+    large: false,
   }
 
   setLarge = () => {
@@ -21,20 +37,31 @@ export default class MapContainer extends React.Component {
     })
   }
 
-  renderSteps = ({ route }) => {
+  renderStepMarkers = (route, pinStep) => {
     const steps = route.legs[0].steps
-    return steps.map(step => {
-        return <Marker position={step.end_location}>
+    console.log(steps)
+
+    return steps.map((step, index) => {
+        return (
+        <Marker icon={pinStep} key={index} position={Object.values(step.start_location)}>
           <Popup>
           <div className="popup">
-            <div className="step-details">
-              <span>{step.distance}</span>
-              <span>{step.duration}</span>
+            <div className="step-distance-duration">
+              <span>Distance: {step.distance.text}  </span>
+              <span>Duration: {step.duration.text}</span>
             </div>
-            <span className="comment">{step.html_instructions}</span>
+            <span className="instructions">{step.html_instructions.replace(/(<([^>]+)>)/ig,"")}</span>
+              {"transit_details" in step && 
+                <div className="transit-details">
+                  <img src={step.transit_details.line.icon} alt={step.transit_details.line.name}/>
+                  <p>From <strong>{step.transit_details.departure_stop.name}</strong>, take {step.transit_details.line.name} to <strong>{step.transit_details.arrival_stop.name}</strong></p>
+                </div>
+              }
+              {"steps" in step && <DirectionSteps steps={step.steps}/>}
           </div>
           </Popup>
         </Marker>
+        )
       })
   }
 
@@ -44,12 +71,11 @@ export default class MapContainer extends React.Component {
 
     const pinU = renderToStaticMarkup(<i id="user" class="fas fa-map-pin"></i>)
     const pinI = renderToStaticMarkup(<i id="item" class="fas fa-map-pin"></i>)
-    const dot = renderToStaticMarkup(<i id="map-dot" class="fas fa-circle"></i>)
+    const step = renderToStaticMarkup(<i id="step" class="fas fa-map-marker-alt"></i>)
     const pinUser = divIcon({ html: pinU });
     const pinItem = divIcon({ html: pinI });
-    const mapDot = divIcon({ html: dot });
-    
-    console.log(route)
+    const pinStep = divIcon({ html: step });
+
     return (
 
       <div className="map-container">
@@ -68,7 +94,7 @@ export default class MapContainer extends React.Component {
             </Popup>
           </Marker>
 
-          {route.length > 0 && this.renderSteps()}
+          {Object.keys(route).length > 0 && this.renderStepMarkers(route, pinStep)}
 
           {polyline.length > 0 &&
             <Polyline positions={polyline}/>

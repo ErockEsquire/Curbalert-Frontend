@@ -45,7 +45,7 @@ class App extends React.Component {
     searchHistory: "",
     searchActive: "",
     polyline: [],
-    route: [],
+    route: {},
     routeId: 0,
     form: {
       name: "",
@@ -147,13 +147,16 @@ class App extends React.Component {
     }
 
     const directionsCall = () => {
-      fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`)
+      const transitUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&transit_mode=subway&key=${process.env.REACT_APP_GOOGLE_API}`
+
+      const allUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`
+
+      fetch(mode === "transit" ? transitUrl : allUrl)
       .then(r => r.json())
       .then(object => {
         console.log(object)
         let encoded = object.routes[0].overview_polyline.points
         let polyline = polyUtil.decode(encoded)
-        console.log(polyline)
         this.setState({
           polyline: polyline,
           route: object.routes[0],
