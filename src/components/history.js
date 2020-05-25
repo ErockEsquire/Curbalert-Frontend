@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Accordion, Icon, Label, Button, Modal, Popup } from 'semantic-ui-react'
+import { CSSTransition } from "react-transition-group";
 import UIfx from 'uifx';
 import Sound from '../sounds/switch-click.mp3'
 
@@ -52,7 +53,7 @@ export default function History(props) {
           {tagIt(date)}
         </div>
       </Accordion.Title>
-
+      <CSSTransition in={open} timeout={400} classNames="card-drop" unmountOnExit>
       <Accordion.Content active={open === true}>
         <div className="history-content">
           <div className="history-image-container">
@@ -94,6 +95,7 @@ export default function History(props) {
           </div>
         </div>
       </Accordion.Content>
+      </CSSTransition>
     </Accordion>
   )
 }

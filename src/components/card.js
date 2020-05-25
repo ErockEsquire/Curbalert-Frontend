@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Icon, Label, Popup, Button } from 'semantic-ui-react'
+import { CSSTransition } from "react-transition-group";
 import UIfx from 'uifx';
 import Sound from '../sounds/switch-click.mp3'
 
@@ -30,7 +31,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
   }
 
   const verifyClaim = (item) =>{
-    if(checkDistance(item) < 0.6){
+    if(checkDistance(item) < 1){
       handleClaim(item)
     } else {
       setBadClaim(true)
@@ -38,7 +39,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
   }
 
   return (
-    <div className="active-item">
+    <div className="active-item" onMouseLeave={() => setShowClaim(false)} >
       <div className="active-image-container">
         <img className="active-image" src={item.image_url} alt={item.name} onClick={() => handleCard()}/>
         <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
@@ -61,6 +62,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
         </div>
       </div>
       <div className={open ? "active-content-open":"active-content-close"}>
+      <CSSTransition in={open} timeout={400} classNames="card-drop" unmountOnExit>
         <div className={open ? "card-open":"card-close"}>
           <div className="card-details">
             <div className="card-left">
@@ -72,17 +74,18 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
             </div>
           </div>
           <p className="dash-comment">{item.comment}</p>
-          <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
+          <p className="posted-by">Claimed: <strong>{item.claimed ? "Yes":"No"}</strong></p>
           <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
-          {user.id === item.users[0].id && !item.claimed ? 
+          {(user.id !== item.users[0].id && !item.claimed) ? 
             <div className="claim-button">
               <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
-              <div>{showClaim ? <Button onMouseLeave={() => setShowClaim(false)} onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
+              <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
               {(badClaim && !showClaim) && <div className="error">You are too far to claim this!</div>}
             </div>
             :null
           }
         </div>
+        </CSSTransition>
       </div>
     </div>
   )

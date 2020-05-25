@@ -3,11 +3,18 @@ import Map from '../components/map'
 import Dashboard from '../components/dashboard'
 import Active from '../components/active'
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from "react-router-dom";
+
 export default function Main({ user, currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard, checkDate, handleClaim, handleAvail, handleSearchActive, searchActive, fetchLocation, checkDistance, fetchDirections, polyline, route, routeId }) {
 
   const [dash, setDash] = useState(false)
   return (
     <main className="main-container">
+      {user === "pending" && <Redirect to="/login"/>}
       <div className="header">
         <h1 className="header-title">CurbAlert</h1>
         <div className="header-bar">

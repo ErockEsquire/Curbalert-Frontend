@@ -3,7 +3,7 @@
 }
 
 body {
-  background-image: url('./images/dune-rotatedclock.jpg');
+  background-image: url('./images/legocity.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -244,7 +244,7 @@ input {
 
 .histories h3 {
   color: white;
-  text-align: right;
+  text-align: center;
   margin-right: 1rem;
 }
 
@@ -256,6 +256,9 @@ div.leaflet-top.leaflet-left {
   margin-left: 5rem;
   height: 100vh;
   width: 100%;
+  background-image: url('./images/dune-rotatedclock.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .header {
@@ -585,11 +588,13 @@ div.leaflet-top.leaflet-left {
   height: 0;
   background-color: rgb(2, 128, 144);
   border-radius: 6px;
+  transition: 400ms;
 }
 
 .active-content-open {
-  height: fit-content;
-  transition: all 400ms ease;
+  height: auto;
+  max-height: 322px;
+  transition: max-height 600ms ease-out;
   background-color: rgb(2, 128, 144);
   border-radius: 6px;
   padding-bottom: 0.5rem;
@@ -602,11 +607,12 @@ div.leaflet-top.leaflet-left {
 .card-open {
   display: block;
   padding: 0 0.5rem;
+  transition: 400ms;
 }
 
 .claim-button {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .add.square.icon.from-active {
@@ -1033,3 +1039,112 @@ div.leaflet-top.leaflet-left {
 .directions p {
   margin: 0;
 }
+
+
+.form-container {
+  margin: 1rem auto;
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 8px;
+  border-radius: 10px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 500px;
+  margin-top: -250px;
+  margin-left: -250px;
+  background: rgba(255,255,255, 0.7)
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container form label {
+  font-size: 0.8rem;
+}
+
+.form-container form input, 
+.form-container form textarea, 
+.form-container form select {
+  border-radius: 5px;
+  padding: 9px;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  border: none;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+}
+
+.form-container form input:focus, 
+.form-container form textarea:focus, 
+.form-container form select:focus {
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+}
+
+.form-container form input[type="submit"] {
+  width: 30%;
+  font-weight: 500;
+  background-color: var(--magenta);
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.form-container form input[type="submit"]:focus,
+.form-container form input[type="submit"]:active {
+  outline: none;
+  transform: scale(0.95);
+}
+
+.entry-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui.button.login-register-button {
+  background-color: #EADEDA;
+}
+
+.ui.button.login-register-button a {
+  color: #32292F;
+}
+
+.ui.button.login-register-button:hover {
+  background-color: #CACBCD;
+}
+
+.welcome {
+  background-image: url('./images/Clouds.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* .card-drop-enter {
+  opacity: 0;
+  transform: translateY(-10%);
+}
+
+.card-drop-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.card-drop-exit {
+  opacity: 0;
+  transform: translateY(-10%);
+  transition: .3s ease-in-out;
+}
+
+.card-drop-exit-active {
+  opacity: 0;
+  transition: .3s ease-in-out;
+  transition: opacity 300ms, transform 300ms;
+} */

@@ -8,6 +8,7 @@ import { ReactComponent as CarIcon } from '../icons/car.svg'
 export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance, fetchDirections, route, routeId }) {
 
   const [badClaim, setBadClaim] = useState(false)
+  const [badClaimItem, setBadClaimItem] = useState(0)
   const [goodClaim, setGoodClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
   const [details, setDetails] = useState(true)
@@ -17,11 +18,12 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
   const [showDirections, setShowDirections] = useState(false)
 
   const verifyClaim = (item) =>{
-    if(checkDistance(item) < 0.6){
+    if(checkDistance(item) < 1){
       handleClaim(item)
       setGoodClaim(true)
     } else {
       setBadClaim(true)
+      setBadClaimItem(item.id)
     }
   }
 
@@ -31,14 +33,14 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
         <div className="dash-claims">
           <div className="claim-details"><p>Want to claim item?</p></div>
           <div className="claim-button">
-          {(user.id !== item.users[0].id) ?
+          {(user.id === item.users[0].id) ?
             <div className="posted-by">You cannot claim your own item!</div>:
               (item.claimed) ? 
               <div className="posted-by">This has been claimed.</div>:
               <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
           }
-            <div>{showClaim ? <Button onMouseLeave={() => setShowClaim(false)} onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
-            {(badClaim && !showClaim) && <div className="error"><strong>You are too far to claim this!</strong></div>}
+            <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
+            {(badClaim && !showClaim && item.id === badClaimItem ) && <div className="error"><strong>You are too far to claim this!</strong></div>}
             {(goodClaim && !showClaim) && <div className="congrats">Congrats!</div>}
           </div>
         </div>
@@ -55,7 +57,7 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
             <span>{item.category}</span>
           </div>
           <p className="dash-comment">{item.comment}</p>
-          <p className="posted-by">Claimed: {item.claimed ? "Yes":"No"}</p>
+          <p className="posted-by">Claimed: <strong>{item.claimed ? "Yes":"No"}</strong></p>
           <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
         </div>
       </div>
@@ -126,7 +128,7 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
   const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="angle double up"/>);
   const SortableItemContainer = sortableContainer(({ children }) => <div className="dash-container">{children}</div>);
   const SortableItem = sortableElement(({ item }) => 
-  <div className="dash-item">
+  <div className="dash-item" onMouseLeave={() => setShowClaim(false)}>
     <Modal basic size='mini' trigger={<img className="dash-image" src={item.image_url} alt={item.name}/>}>
       <Modal.Content image>
         <img className={"image-modal"} src={item.image_url} alt={item.name}/>

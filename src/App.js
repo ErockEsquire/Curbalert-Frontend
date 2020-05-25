@@ -2,7 +2,14 @@ import React from 'react';
 import './App.css';
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
+import Login from './components/login'
+import Register from './components/register'
 import arrayMove from 'array-move';
+
+import {
+  BrowserRouter as Router,
+  Route
+} from "react-router-dom";
 
 class App extends React.Component {
 
@@ -32,12 +39,12 @@ class App extends React.Component {
   }
 
   state = {
-    user: 1,
-    currentLat: 0,
-    currentLong: 0,
+    user: "pending",
     items: [],
     histories: [],
     dashboard: [],
+    currentLat: 0,
+    currentLong: 0,
     street_address: "",
     city_address: "",
     state_address: "",
@@ -58,8 +65,6 @@ class App extends React.Component {
       longitude: 0,
       comment: "",
       quality: "",
-      time: this.getTime(),
-      date: this.getDate(),
       image: null,
       preview: null,
       claimed: false
@@ -67,21 +72,79 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    fetch("http://localhost:3000/autologin", {
+      credentials: "include"
+    })
+      .then(r => {
+        if (!r.ok) {
+          throw r
+        }
+        return r.json()
+      })
+      .then(user => {
+        this.setState({
+          user: user,
+          histories: this.checkRecent(user.items)
+        })
+      })
     this.fetchLocation()
     this.fetchItems()
+  }
+
+  componentDidUpdate(prevProps,prevState,snapshot) {
+    if (this.state.user !== prevState.user && this.state.user !== "pending") {
+      this.setState({
+        histories: this.checkRecent(this.state.user.items),
+        dashboard: [],
+        currentLat: 0,
+        currentLong: 0,
+        street_address: "",
+        city_address: "",
+        state_address: "",
+        zip_address: "",
+        searchHistory: "",
+        searchActive: "",
+        polyline: [],
+        route: {},
+        routeId: 0,
+        form: {
+          name: "",
+          category: "",
+          street: "",
+          city: "",
+          state: "",
+          zip: "",
+          latitude: 0,
+          longitude: 0,
+          comment: "",
+          quality: "",
+          image: null,
+          preview: null,
+          claimed: false
+        }
+      })
+      this.fetchLocation()
+      this.fetchItems()
+    }
+  }
+
+  handleUpdateUser = (user) => {
+    this.setState({
+      user: user
+    })
   }
 
   fetchItems = () => {
     fetch(`http://localhost:3000/items`)
     .then(response => response.json())
     .then(items => {
-      let userItems = items.filter(item => item.users[0].id === this.state.user)
+      let userItems = items.filter(item => item.users[0].id === this.state.user.id)
       userItems = this.checkRecent(userItems)
+      console.log(userItems)
       let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
       activeItems = this.checkRecent(activeItems)
       this.setState({
         items: activeItems,
-        histories: userItems
       }, () => console.log(this.state))
     })
   }
@@ -101,10 +164,8 @@ class App extends React.Component {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       }
-    })
+    }, () => this.geoCodeLocation())
   }
-
-  // , () => this.geoCodeLocation()
   
   geoCodeLocation = () => {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
@@ -349,7 +410,9 @@ class App extends React.Component {
   }
 
   submitForm = () => {
-    const { name, category, street, city, state, zip, comment, quality, time, date, validation, claimed, final, latitude, longitude, image } = this.state.form
+    const { name, category, street, city, state, zip, comment, quality, validation, claimed, final, latitude, longitude, image } = this.state.form
+    const date = this.getDate()
+    const time = this.getTime()
     const formData = new FormData();
     formData.append('item[name]', name);
     formData.append('item[category]', category);
@@ -367,7 +430,7 @@ class App extends React.Component {
     formData.append('item[latitude]', latitude);
     formData.append('item[longitude]', longitude);
     formData.append('item[image]', image);
-    formData.append('user[id]', this.state.user)
+    formData.append('user[id]', this.state.user.id)
 
     fetch(`http://localhost:3000/items`, {
       method: "POST",
@@ -402,49 +465,57 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <section id="app">
-        <Navbar
-        user={this.state.user} 
-        handleNewItem={this.handleNewItem}
-        checkDate={this.checkDate}
-        histories={this.state.histories}
-        form={this.state.form}
-        latitude={this.state.currentLat}
-        longitude={this.state.currentLong}
-        searchHistory={this.state.searchHistory}
-        addToDashboard={this.addToDashboard}
-        handleChange={this.handleChange}
-        handleUpload={this.handleUpload}
-        handleSubmit={this.handleSubmit}
-        handleDelete={this.handleDelete}
-        handleSearchHistory={this.handleSearchHistory}
-        />
-        <Main
-        user={this.state.user} 
-        currentLat={this.state.currentLat} 
-        currentLong={this.state.currentLong} 
-        items={this.state.items}
-        dashboard={this.state.dashboard}
-        street={this.state.street_address}
-        city={this.state.city_address}
-        state={this.state.state_address}
-        zip={this.state.zip_address}
-        onSortEnd={this.onSortEnd}
-        addToDashboard={this.addToDashboard}
-        removeFromDashboard={this.removeFromDashboard}
-        checkDate={this.checkDate}
-        handleClaim={this.handleClaim}
-        handleAvail={this.handleAvail}
-        handleSearchActive={this.handleSearchActive}
-        searchActive={this.state.searchActive}
-        fetchLocation={this.fetchLocation}
-        checkDistance={this.checkDistance}
-        fetchDirections={this.fetchDirections}
-        polyline={this.state.polyline}
-        route={this.state.route}
-        routeId={this.state.routeId}
-        />
+        <Router>
+          <Route exact path={`/home`} render={() =>
+          <Navbar
+          user={this.state.user} 
+          handleNewItem={this.handleNewItem}
+          checkDate={this.checkDate}
+          histories={this.state.histories}
+          form={this.state.form}
+          latitude={this.state.currentLat}
+          longitude={this.state.currentLong}
+          searchHistory={this.state.searchHistory}
+          addToDashboard={this.addToDashboard}
+          handleChange={this.handleChange}
+          handleUpload={this.handleUpload}
+          handleSubmit={this.handleSubmit}
+          handleDelete={this.handleDelete}
+          handleSearchHistory={this.handleSearchHistory}
+          handleUpdateUser={this.handleUpdateUser}
+          />}/>
+          <Route exact path={`/home`} render={() =>
+          <Main
+          user={this.state.user} 
+          currentLat={this.state.currentLat} 
+          currentLong={this.state.currentLong} 
+          items={this.state.items}
+          dashboard={this.state.dashboard}
+          street={this.state.street_address}
+          city={this.state.city_address}
+          state={this.state.state_address}
+          zip={this.state.zip_address}
+          onSortEnd={this.onSortEnd}
+          addToDashboard={this.addToDashboard}
+          removeFromDashboard={this.removeFromDashboard}
+          checkDate={this.checkDate}
+          handleClaim={this.handleClaim}
+          handleAvail={this.handleAvail}
+          handleSearchActive={this.handleSearchActive}
+          searchActive={this.state.searchActive}
+          fetchLocation={this.fetchLocation}
+          checkDistance={this.checkDistance}
+          fetchDirections={this.fetchDirections}
+          polyline={this.state.polyline}
+          route={this.state.route}
+          routeId={this.state.routeId}
+          />}/>
+          <Route exact path={`/register`} render={routeProps => <Register {...routeProps} user={this.state.user}/>} />
+          <Route exact path={`/login`} render={routeProps => <Login {...routeProps} handleUpdateUser={this.handleUpdateUser} user={this.state.user}/>}/>
+        </Router>
       </section>
     );
   }
