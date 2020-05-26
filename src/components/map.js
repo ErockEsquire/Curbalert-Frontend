@@ -80,7 +80,7 @@ export default class MapContainer extends React.Component {
 
       <div className="map-container">
         <Map className="map" center={position} zoom={this.state.zoom} 
-        style={{display: "inline-block", margin:"0 0.5rem", height: "87.5vh", width: "57vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
+        style={{display: "inline-block", margin:"0px 1.2rem 0 .5rem", height: "87.5vh", width: "57vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}>
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"

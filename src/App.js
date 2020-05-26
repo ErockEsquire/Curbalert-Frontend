@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './App.css';
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
 import Login from './components/login'
 import Register from './components/register'
+import Welcome from './components/welcome'
 import arrayMove from 'array-move';
 
 import {
@@ -40,6 +41,7 @@ class App extends React.Component {
 
   state = {
     user: "pending",
+    show: false,
     items: [],
     histories: [],
     dashboard: [],
@@ -89,12 +91,18 @@ class App extends React.Component {
       })
     this.fetchLocation()
     this.fetchItems()
+    setTimeout(()=> {
+      this.setState({
+        show: true
+      })
+    }, 3000)
   }
 
   componentDidUpdate(prevProps,prevState,snapshot) {
     if (this.state.user !== prevState.user && this.state.user !== "pending") {
       this.setState({
         histories: this.checkRecent(this.state.user.items),
+        show: false,
         dashboard: [],
         currentLat: 0,
         currentLong: 0,
@@ -125,6 +133,11 @@ class App extends React.Component {
       })
       this.fetchLocation()
       this.fetchItems()
+      setTimeout(()=> {
+        this.setState({
+          show: true
+        })
+      }, 3000)
     }
   }
 
@@ -138,14 +151,11 @@ class App extends React.Component {
     fetch(`http://localhost:3000/items`)
     .then(response => response.json())
     .then(items => {
-      let userItems = items.filter(item => item.users[0].id === this.state.user.id)
-      userItems = this.checkRecent(userItems)
-      console.log(userItems)
       let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
       activeItems = this.checkRecent(activeItems)
       this.setState({
-        items: activeItems,
-      }, () => console.log(this.state))
+        items: activeItems
+      })
     })
   }
 
@@ -470,49 +480,55 @@ class App extends React.Component {
       <section id="app">
         <Router>
           <Route exact path={`/home`} render={() =>
-          <Navbar
-          user={this.state.user} 
-          handleNewItem={this.handleNewItem}
-          checkDate={this.checkDate}
-          histories={this.state.histories}
-          form={this.state.form}
-          latitude={this.state.currentLat}
-          longitude={this.state.currentLong}
-          searchHistory={this.state.searchHistory}
-          addToDashboard={this.addToDashboard}
-          handleChange={this.handleChange}
-          handleUpload={this.handleUpload}
-          handleSubmit={this.handleSubmit}
-          handleDelete={this.handleDelete}
-          handleSearchHistory={this.handleSearchHistory}
-          handleUpdateUser={this.handleUpdateUser}
-          />}/>
-          <Route exact path={`/home`} render={() =>
-          <Main
-          user={this.state.user} 
-          currentLat={this.state.currentLat} 
-          currentLong={this.state.currentLong} 
-          items={this.state.items}
-          dashboard={this.state.dashboard}
-          street={this.state.street_address}
-          city={this.state.city_address}
-          state={this.state.state_address}
-          zip={this.state.zip_address}
-          onSortEnd={this.onSortEnd}
-          addToDashboard={this.addToDashboard}
-          removeFromDashboard={this.removeFromDashboard}
-          checkDate={this.checkDate}
-          handleClaim={this.handleClaim}
-          handleAvail={this.handleAvail}
-          handleSearchActive={this.handleSearchActive}
-          searchActive={this.state.searchActive}
-          fetchLocation={this.fetchLocation}
-          checkDistance={this.checkDistance}
-          fetchDirections={this.fetchDirections}
-          polyline={this.state.polyline}
-          route={this.state.route}
-          routeId={this.state.routeId}
-          />}/>
+            <main id="main">
+              <Welcome user={this.state.user}/>
+              {this.state.show &&
+              <Fragment>
+              <Navbar
+                user={this.state.user} 
+                handleNewItem={this.handleNewItem}
+                checkDate={this.checkDate}
+                histories={this.state.histories}
+                form={this.state.form}
+                latitude={this.state.currentLat}
+                longitude={this.state.currentLong}
+                searchHistory={this.state.searchHistory}
+                addToDashboard={this.addToDashboard}
+                handleChange={this.handleChange}
+                handleUpload={this.handleUpload}
+                handleSubmit={this.handleSubmit}
+                handleDelete={this.handleDelete}
+                handleSearchHistory={this.handleSearchHistory}
+                handleUpdateUser={this.handleUpdateUser}
+              />
+              <Main
+                user={this.state.user} 
+                currentLat={this.state.currentLat} 
+                currentLong={this.state.currentLong} 
+                items={this.state.items}
+                dashboard={this.state.dashboard}
+                street={this.state.street_address}
+                city={this.state.city_address}
+                state={this.state.state_address}
+                zip={this.state.zip_address}
+                onSortEnd={this.onSortEnd}
+                addToDashboard={this.addToDashboard}
+                removeFromDashboard={this.removeFromDashboard}
+                checkDate={this.checkDate}
+                handleClaim={this.handleClaim}
+                handleAvail={this.handleAvail}
+                handleSearchActive={this.handleSearchActive}
+                searchActive={this.state.searchActive}
+                fetchLocation={this.fetchLocation}
+                checkDistance={this.checkDistance}
+                fetchDirections={this.fetchDirections}
+                polyline={this.state.polyline}
+                route={this.state.route}
+                routeId={this.state.routeId}
+              />
+              </Fragment>}
+            </main>
+          }/>
           <Route exact path={`/register`} render={routeProps => <Register {...routeProps} user={this.state.user}/>} />
           <Route exact path={`/login`} render={routeProps => <Login {...routeProps} handleUpdateUser={this.handleUpdateUser} user={this.state.user}/>}/>
         </Router>
