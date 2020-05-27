@@ -31,15 +31,13 @@ export default class Login extends React.Component {
     })
       .then(r => {
         if (!r.ok) {
-          alert('u no get in ')
+          alert(`You've entered incorrect email/username or password`)
           throw r
         }
         return r.json()
       }
       )
       .then(user => {
-        console.log(this.props)
-        console.log(user)
         this.props.handleUpdateUser(user)
         this.props.history.push("/home")
       })

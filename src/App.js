@@ -513,6 +513,7 @@ class App extends React.Component {
               </Fragment>}
             </main>
           }/>
+          <Route exact path={`/`}><Redirect to="/login" /></Route>
           <Route exact path={`/register`} render={routeProps => <Register {...routeProps} user={this.state.user}/>} />
           <Route exact path={`/login`} render={routeProps => <Login {...routeProps} handleUpdateUser={this.handleUpdateUser} user={this.state.user}/>}/>
         </Router>
