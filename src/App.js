@@ -13,6 +13,8 @@ import {
   Route
 } from "react-router-dom";
 
+const BASE_URL = `https://curbalert-api.herokuapp.com/`
+
 class App extends React.Component {
 
   state = {
@@ -52,7 +54,7 @@ class App extends React.Component {
     }
   }
 
-  BASE_URL = `https://curbalert-api.herokuapp.com/`
+
 
   componentDidMount() {
     fetch(BASE_URL + `autologin`, {
@@ -132,7 +134,7 @@ class App extends React.Component {
   }
 
   fetchItems = () => {
-    fetch(BASEURL + `items`)
+    fetch(BASE_URL + `items`)
     .then(response => response.json())
     .then(items => {
       let activeItems = items.filter(item => checkDate(item.date) <= 3)
