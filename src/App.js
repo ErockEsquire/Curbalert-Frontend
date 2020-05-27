@@ -56,6 +56,7 @@ class App extends React.Component {
     polyline: [],
     route: {},
     routeId: 0,
+    plot: [],
     form: {
       name: "",
       category: "",
@@ -103,7 +104,7 @@ class App extends React.Component {
       this.setState({
         histories: this.checkRecent(this.state.user.items),
         show: false,
-        dashboard: [],
+        dashboard: this.checkRecent(this.state.user.dashboard_items),
         currentLat: 0,
         currentLong: 0,
         street_address: "",
@@ -237,6 +238,12 @@ class App extends React.Component {
     }
   }
 
+  plotMarker = (item) => {
+    this.setState({
+      plot: item
+    })
+  }
+
   checkDate = (date) => {
     const date1 = new Date(date);
     const date2 = new Date();
@@ -288,7 +295,7 @@ class App extends React.Component {
     if(this.state.dashboard.length < 5) {
       this.setState({
         dashboard: [item, ...this.state.dashboard]
-      })
+      }, () => this.saveToDashboard)
     }
   }
 
@@ -297,6 +304,25 @@ class App extends React.Component {
     this.setState({
       dashboard: dash
     })
+  }
+
+  saveToDashboard = () => {
+    const dashboard = this.state.dashboard
+    if(dashboard.length > 0) {
+      const user = this.state.user
+    
+      fetch(`http://localhost:3000/dashboard/${user}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dashboard: dashboard,
+          user: user
+        })
+      });
+    }
   }
 
   onSortEnd = ({oldIndex, newIndex}) => {
@@ -423,6 +449,7 @@ class App extends React.Component {
     const { name, category, street, city, state, zip, comment, quality, validation, claimed, final, latitude, longitude, image } = this.state.form
     const date = this.getDate()
     const time = this.getTime()
+
     const formData = new FormData();
     formData.append('item[name]', name);
     formData.append('item[category]', category);
@@ -475,7 +502,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <section id="app">
         <Router>
@@ -500,6 +526,7 @@ class App extends React.Component {
                 handleDelete={this.handleDelete}
                 handleSearchHistory={this.handleSearchHistory}
                 handleUpdateUser={this.handleUpdateUser}
+                saveToDashboard={this.saveToDashboard}
               />
               <Main
                 user={this.state.user} 
@@ -525,6 +552,8 @@ class App extends React.Component {
                 polyline={this.state.polyline}
                 route={this.state.route}
                 routeId={this.state.routeId}
+                plotMarker={this.plotMarker}
+                plot={this.state.plot}
               />
               </Fragment>}
             </main>

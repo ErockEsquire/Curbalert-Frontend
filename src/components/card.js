@@ -4,7 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import UIfx from 'uifx';
 import Sound from '../sounds/switch-click.mp3'
 
-export default function Card({ user, item, checkDate, checkDistance, addToDashboard, handleClaim, fetchLocation }) {
+export default function Card({ user, item, checkDate, checkDistance, addToDashboard, handleClaim, fetchLocation, plotMarker }) {
   const [open, setOpen] = useState(false)
   const [badClaim, setBadClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
@@ -53,6 +53,7 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
           size='tiny'
           trigger={<Icon className="from-active" name="add square" onClick={() => {addToDashboard(item); switchClick.play()}}/>}
         />
+        <Icon className="center-button" name="map" onClick={() => plotMarker(item)}/>
       </div>
       <div className="active-header" onClick={() => handleCard()}>
         <p className="active-name">{item.name}</p>

@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from '../components/card'
 
-export default function Active({ user, items, checkDate, addToDashboard, handleClaim, handleSearchActive, searchActive, fetchLocation, checkDistance }) {
+export default function Active({ user, items, checkDate, addToDashboard, handleClaim, handleSearchActive, searchActive, fetchLocation, checkDistance, plotMarker }) {
 
   const filterActives = (items) => {
     return items.filter(item => {
@@ -13,13 +13,13 @@ export default function Active({ user, items, checkDate, addToDashboard, handleC
   const renderItemsEven = () => {
     const activeItems = filterActives(items)
     const evenItems = activeItems.filter((item, index) => index % 2 === 0)
-    return evenItems.map(item => <Card user={user} item={item} addToDashboard={addToDashboard} checkDate={checkDate} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance}/>)
+    return evenItems.map(item => <Card user={user} item={item} addToDashboard={addToDashboard} checkDate={checkDate} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance} plotMarker={plotMarker}/>)
   }
 
   const renderItemsOdd = () => {
     const activeItems = filterActives(items)
     const oddItems = activeItems.filter((item, index) => index % 2 !== 0)
-    return oddItems.map(item => <Card user={user} item={item} addToDashboard={addToDashboard} checkDate={checkDate} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance}/>)
+    return oddItems.map(item => <Card user={user} item={item} addToDashboard={addToDashboard} checkDate={checkDate} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance} plotMarker={plotMarker}/>)
   }
 
   return(

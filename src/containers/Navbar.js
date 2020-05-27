@@ -22,7 +22,7 @@ const Username = (props) => {
 }
 
 export default function Navbar(props) {
-  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, searchHistory, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete, handleSearchHistory, handleUpdateUser } = props
+  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, searchHistory, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete, handleSearchHistory, handleUpdateUser, saveToDashboard } = props
   
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(false);
@@ -41,13 +41,13 @@ export default function Navbar(props) {
   }
 
   const handleLogout = () => {
+    saveToDashboard()
     fetch("http://localhost:3000/logout", {
       method: "POST",
       credentials: "include"
     })
       .then(r => r.json())
       .then(() => {
-        console.log("hey")
         handleUpdateUser("pending")
       })
   }

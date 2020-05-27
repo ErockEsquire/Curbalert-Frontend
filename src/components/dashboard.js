@@ -4,8 +4,12 @@ import { Modal, Icon, Button } from 'semantic-ui-react'
 import { ReactComponent as WalkingIcon } from '../icons/walking.svg'
 import { ReactComponent as TransitIcon } from '../icons/subway.svg'
 import { ReactComponent as CarIcon } from '../icons/car.svg'
+import UIfx from 'uifx';
+import Sound from '../sounds/remove.mp3'
 
-export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance, fetchDirections, route, routeId }) {
+export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance, fetchDirections, route, routeId, plotMarker }) {
+
+  const removeClick = new UIfx(Sound);
 
   const [badClaim, setBadClaim] = useState(false)
   const [badClaimItem, setBadClaimItem] = useState(0)
@@ -70,9 +74,9 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
       <div className={directions ? "dash-tab-active":"dash-tab-inactive"}>
         <div className="dash-directions">
           <div className="dash-direction-mode">
-            {mode === "walking" ? <div className="mode-highlight"><WalkingIcon className="directions-icon-walking" onClick={(e) => {setMode("walking"); console.log(mode)}}/></div>:<WalkingIcon className="directions-icon-walking" onClick={(e) => setMode("walking")}/>}
-            {mode === "transit" ? <div className="mode-highlight"><TransitIcon className="directions-icon-transit" onClick={(e) => {setMode("transit"); console.log(mode)}}/></div>:<TransitIcon className="directions-icon-transit" onClick={(e) => setMode("transit")}/>}
-            {mode === "driving" ? <div className="mode-highlight"><CarIcon className="directions-icon-driving" onClick={(e) => {setMode("driving"); console.log(mode)}}/></div>:<CarIcon className="directions-icon-driving" onClick={(e) => setMode("driving")}/>}
+            {mode === "walking" ? <div className="mode-highlight"><WalkingIcon className="directions-icon-walking" onClick={(e) => setMode("walking")}/></div>:<WalkingIcon className="directions-icon-walking" onClick={(e) => setMode("walking")}/>}
+            {mode === "transit" ? <div className="mode-highlight"><TransitIcon className="directions-icon-transit" onClick={(e) => setMode("transit")}/></div>:<TransitIcon className="directions-icon-transit" onClick={(e) => setMode("transit")}/>}
+            {mode === "driving" ? <div className="mode-highlight"><CarIcon className="directions-icon-driving" onClick={(e) => setMode("driving")}/></div>:<CarIcon className="directions-icon-driving" onClick={(e) => setMode("driving")}/>}
           </div>
           <div className="dash-directions-button">
             <Button onClick={() => {fetchDirections(item, mode); setShowDirections(true)}}>Get Directions!</Button>
@@ -125,7 +129,7 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
     )
   }
 
-  const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="angle double up"/>);
+  const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="angle double up" />);
   const SortableItemContainer = sortableContainer(({ children }) => <div className="dash-container">{children}</div>);
   const SortableItem = sortableElement(({ item }) => 
   <div className="dash-item" onMouseLeave={() => setShowClaim(false)}>
@@ -143,10 +147,10 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
           </div>
           <div className="dash-drag-container">
             <DragHandle />
-            <Icon className="dash-drag" name="remove" onClick={()=>removeFromDashboard(item.id)}/>
+            <Icon className="dash-drag" name="remove" onClick={() => {removeFromDashboard(item.id); removeClick.play()}}/>
           </div>
         </div>
-        <p className="dash-name">{item.name}</p>
+        <Icon name="map" onClick={() => plotMarker(item)}/><p className="dash-name">{item.name}</p>
         <div className="dash-datetime">
           <span><strong>{item.street_address}, {item.city_address},</strong></span>
           <span><strong>{item.state_address} {item.zip_address}</strong></span>
