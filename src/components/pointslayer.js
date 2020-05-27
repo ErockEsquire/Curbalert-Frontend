@@ -20,7 +20,7 @@ export default function PointsLayer({ items, plot, addToDashboard }) {
   ));
 }
 
-const PointMarker = ({ item, openPopup, addToDashboard, plot }) => {
+const PointMarker = ({ item, openPopup, addToDashboard }) => {
   const [large, setLarge] = useState(false)
   const markerRef = useRef(null);
 

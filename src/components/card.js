@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Modal, Icon, Label, Popup, Button } from 'semantic-ui-react'
+import { Modal, Icon, Popup, Button } from 'semantic-ui-react'
 import { CSSTransition } from "react-transition-group";
+import { tagIt } from './utils'
 import UIfx from 'uifx';
 import Sound from '../sounds/switch-click.mp3'
 
-export default function Card({ user, item, checkDate, checkDistance, addToDashboard, handleClaim, fetchLocation, plotMarker }) {
+export default function Card({ user, item, checkDistance, addToDashboard, handleClaim, fetchLocation, plotMarker }) {
   const [open, setOpen] = useState(false)
   const [badClaim, setBadClaim] = useState(false)
   const [showClaim, setShowClaim] = useState(false)
@@ -15,19 +16,6 @@ export default function Card({ user, item, checkDate, checkDistance, addToDashbo
     setShowClaim(false)
     setBadClaim(false)
     setOpen(!open)
-  }
-
-  const tagIt = (date) => {
-    const days = checkDate(date)
-    if(days <= 1) {
-      return <Label as='a' color='red' tag>Active</Label>
-    } else if(days <= 2) {
-      return <Label as='a' color='orange' tag>Active</Label>
-    } else if(days <= 3) {
-      return <Label as='a' color='blue' tag>Active</Label>
-    } else {
-      return null
-    }
   }
 
   const verifyClaim = (item) =>{

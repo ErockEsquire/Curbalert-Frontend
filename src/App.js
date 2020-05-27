@@ -6,6 +6,7 @@ import Login from './components/login'
 import Register from './components/register'
 import Welcome from './components/welcome'
 import arrayMove from 'array-move';
+import { checkDate, checkRecent, getTime, getDate} from './components/utils'
 
 import {
   BrowserRouter as Router,
@@ -13,31 +14,6 @@ import {
 } from "react-router-dom";
 
 class App extends React.Component {
-
-  getTime = () => {
-    let date = new Date()
-    let minute = date.getMinutes()
-    if(minute < 10){
-      minute = "0" + minute
-    }
-    let meridiem = "AM"
-    let hour = date.getHours()
-    if(hour > 12){
-      hour -= 12
-      meridiem = "PM"
-    } else if(hour === 0) {
-      hour = 12
-    }
-    return `${hour}:${minute} ${meridiem}`
-  }
-  
-  getDate = () => {
-    let date = new Date()
-    let month = date.getMonth() + 1
-    let day = date.getDate()
-    let year = date.getFullYear()
-    return `${month}/${day}/${year}`
-  }
 
   state = {
     user: "pending",
@@ -47,16 +23,18 @@ class App extends React.Component {
     dashboard: [],
     currentLat: 0,
     currentLong: 0,
-    street_address: "",
-    city_address: "",
-    state_address: "",
-    zip_address: "",
     searchHistory: "",
     searchActive: "",
     polyline: [],
     route: {},
     routeId: 0,
     plot: [],
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+    },
     form: {
       name: "",
       category: "",
@@ -87,7 +65,7 @@ class App extends React.Component {
       .then(user => {
         this.setState({
           user: user,
-          histories: this.checkRecent(user.items)
+          histories: checkRecent(user.items)
         })
       })
     this.fetchLocation()
@@ -102,20 +80,23 @@ class App extends React.Component {
   componentDidUpdate(prevProps,prevState,snapshot) {
     if (this.state.user !== prevState.user && this.state.user !== "pending") {
       this.setState({
-        histories: this.checkRecent(this.state.user.items),
+        histories: checkRecent(this.state.user.items),
         show: false,
-        dashboard: this.checkRecent(this.state.user.dashboard_items),
+        dashboard: checkRecent(this.state.user.dashboard_items),
         currentLat: 0,
         currentLong: 0,
-        street_address: "",
-        city_address: "",
-        state_address: "",
-        zip_address: "",
         searchHistory: "",
         searchActive: "",
         polyline: [],
+        plot: [],
         route: {},
         routeId: 0,
+        address: {
+          street: "",
+          city: "",
+          state: "",
+          zip: "",
+        },
         form: {
           name: "",
           category: "",
@@ -152,8 +133,8 @@ class App extends React.Component {
     fetch(`http://localhost:3000/items`)
     .then(response => response.json())
     .then(items => {
-      let activeItems = items.filter(item => this.checkDate(item.date) <= 3)
-      activeItems = this.checkRecent(activeItems)
+      let activeItems = items.filter(item => checkDate(item.date) <= 3)
+      activeItems = checkRecent(activeItems)
       this.setState({
         items: activeItems
       })
@@ -184,10 +165,13 @@ class App extends React.Component {
     .then(object => {
       const address = object.results[0].formatted_address.split(', ')
       this.setState(prevState => ({
-        street_address: address[0],
-        city_address: address[1],
-        state_address: address[2].split(' ')[0],
-        zip_address: address[2].split(' ')[1],
+        address: {
+          ...prevState.form,
+          street: address[0],
+          city: address[1],
+          state: address[2].split(' ')[0],
+          zip: address[2].split(' ')[1],
+        },
         form: {
           ...prevState.form,
           street: address[0],
@@ -220,13 +204,11 @@ class App extends React.Component {
 
     const directionsCall = () => {
       const transitUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&transit_mode=subway&key=${process.env.REACT_APP_GOOGLE_API}`
-
       const allUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`
 
       fetch(mode === "transit" ? transitUrl : allUrl)
       .then(r => r.json())
       .then(object => {
-        console.log(object)
         let encoded = object.routes[0].overview_polyline.points
         let polyline = polyUtil.decode(encoded)
         this.setState({
@@ -236,37 +218,6 @@ class App extends React.Component {
         })
       })
     }
-  }
-
-  plotMarker = (item) => {
-    this.setState({
-      plot: item
-    })
-  }
-
-  checkDate = (date) => {
-    const date1 = new Date(date);
-    const date2 = new Date();
-    return Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24));
-  }
-
-  checkTime = (time) => {
-    let hour = time.match(/\d+/)
-    hour = parseInt(hour[0])
-    let minute = time.match(/(?<=:)\d+/)
-    minute = parseInt(minute[0])
-    let meridiem = time.match(/\w+$/ig)
-    if(meridiem[0] === "PM"){
-        hour += 12
-    }
-    hour = hour * 60
-    let minutes = minute + hour
-    return minutes
-  }
-
-  checkRecent = (items) => {
-    let sorted = items.sort((a,b) => (((this.checkDate(a.date)) * 1440) - (this.checkTime(a.time)) - (((this.checkDate(b.date)) * 1440) - (this.checkTime(b.time))) ))
-    return sorted
   }
 
   checkDistance = (item) => {
@@ -283,12 +234,20 @@ class App extends React.Component {
       const d = R * c;
       return d;
     }
-
+  
     function deg2rad(deg) {
       return deg * (Math.PI/180)
     }
-
+  
     return getDistanceFromLatLonInKm(this.state.currentLat, this.state.currentLong, item.latitude, item.longitude)
+  }
+
+  plotMarker = (item) => {
+    this.setState({
+      plot: item
+    }, () => setTimeout(this.setState({
+      plot: []
+    }), 3000))
   }
 
   addToDashboard = (item) => {
@@ -360,7 +319,7 @@ class App extends React.Component {
     newItems = updateItems.concat(noUpdateItems)
 
     newItems.push(newItem)
-    newItems = this.checkRecent(newItems)
+    newItems = checkRecent(newItems)
     this.setState({ 
       items: newItems
     })
@@ -425,7 +384,7 @@ class App extends React.Component {
     event.preventDefault()
     URL.revokeObjectURL(this.state.form.preview)
 
-    if(this.state.form.street !== this.state.street_address) {
+    if(this.state.form.street !== this.state.address.street) {
       const street = this.state.form.street.replace(/ /g, '+')
       const city = this.state.form.city.replace(/ /g, '+')
       const state = this.state.form.state
@@ -447,8 +406,8 @@ class App extends React.Component {
 
   submitForm = () => {
     const { name, category, street, city, state, zip, comment, quality, validation, claimed, final, latitude, longitude, image } = this.state.form
-    const date = this.getDate()
-    const time = this.getTime()
+    const date = getDate()
+    const time = getTime()
 
     const formData = new FormData();
     formData.append('item[name]', name);
@@ -483,14 +442,12 @@ class App extends React.Component {
           form: {
             name: "",
             category: "",
-            street: this.state.street_address,
-            city: this.state.city_address,
-            state: this.state.state_address,
-            zip: this.state.zip_address,
+            street: this.state.address.street,
+            city: this.state.address.city,
+            state: this.state.address.state,
+            zip: this.state.address.zip,
             comment: "",
             quality: "",
-            time: this.getTime(),
-            date: this.getDate(),
             image: null,
             preview: null,
             validation: 0,
@@ -502,6 +459,7 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <section id="app">
         <Router>
@@ -513,11 +471,8 @@ class App extends React.Component {
               <Navbar
                 user={this.state.user} 
                 handleNewItem={this.handleNewItem}
-                checkDate={this.checkDate}
                 histories={this.state.histories}
                 form={this.state.form}
-                latitude={this.state.currentLat}
-                longitude={this.state.currentLong}
                 searchHistory={this.state.searchHistory}
                 addToDashboard={this.addToDashboard}
                 handleChange={this.handleChange}
@@ -534,14 +489,10 @@ class App extends React.Component {
                 currentLong={this.state.currentLong} 
                 items={this.state.items}
                 dashboard={this.state.dashboard}
-                street={this.state.street_address}
-                city={this.state.city_address}
-                state={this.state.state_address}
-                zip={this.state.zip_address}
+                address={this.state.address}
                 onSortEnd={this.onSortEnd}
                 addToDashboard={this.addToDashboard}
                 removeFromDashboard={this.removeFromDashboard}
-                checkDate={this.checkDate}
                 handleClaim={this.handleClaim}
                 handleAvail={this.handleAvail}
                 handleSearchActive={this.handleSearchActive}

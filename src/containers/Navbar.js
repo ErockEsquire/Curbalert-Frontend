@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ReactComponent as ChatIcon } from '../icons/chat.svg'
 import { ReactComponent as HistoryIcon } from '../icons/history.svg'
 import { ReactComponent as PostIcon } from '../icons/post.svg'
 import { ReactComponent as UsernameIcon } from '../icons/username.svg'
@@ -22,7 +21,7 @@ const Username = (props) => {
 }
 
 export default function Navbar(props) {
-  const { user, handleNewItem, checkDate, histories, form, latitude, longitude, searchHistory, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete, handleSearchHistory, handleUpdateUser, saveToDashboard } = props
+  const { user, handleNewItem, histories, form, searchHistory, addToDashboard, handleChange, handleUpload, handleSubmit, handleDelete, handleSearchHistory, handleUpdateUser, saveToDashboard } = props
   
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(false);
@@ -70,15 +69,12 @@ export default function Navbar(props) {
       user={user} 
       handleNewItem={handleNewItem}
       form={form}
-      latitude={latitude}
-      longitude={longitude}
       handleChange={handleChange}
       handleUpload={handleUpload}
       handleSubmit={handleSubmit}
       />
       <Histories 
       tab={history} 
-      checkDate={checkDate}
       histories={histories}
       searchHistory={searchHistory}
       addToDashboard={addToDashboard}  

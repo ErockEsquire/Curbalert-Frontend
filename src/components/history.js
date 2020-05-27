@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Accordion, Icon, Label, Button, Modal, Popup } from 'semantic-ui-react'
+import { Accordion, Icon, Button, Modal, Popup } from 'semantic-ui-react'
 import { CSSTransition } from "react-transition-group";
 import UIfx from 'uifx';
 import Sound from '../sounds/switch-click.mp3'
+import { tagIt } from './utils'
 
 export default function History(props) {
 
@@ -23,23 +24,10 @@ export default function History(props) {
   } = props.history
 
   const switchClick = new UIfx(Sound);
-  const { checkDate, addToDashboard, handleDelete } = props
+  const { addToDashboard, handleDelete } = props
   const [open, setOpen] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [deleteButton, setDeleteButton] = useState(false)
-
-  const tagIt = (date) => {
-    const days = checkDate(date)
-    if(days <= 1) {
-      return <Label as='a' color='red' tag>Active</Label>
-    } else if(days <= 2) {
-      return <Label as='a' color='orange' tag>Active</Label>
-    } else if(days <= 3) {
-      return <Label as='a' color='blue' tag>Active</Label>
-    } else {
-      return null
-    }
-  }
 
   return (
     <Accordion inverted>

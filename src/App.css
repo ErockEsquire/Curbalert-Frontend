@@ -321,6 +321,10 @@ div.leaflet-top.leaflet-left {
   height: 100%;
 }
 
+#current-address {
+  margin-top: 4px;
+}
+
 .leaflet-popup-content-wrapper {
   display: flex;
   flex-direction: column;

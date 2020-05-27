@@ -9,7 +9,7 @@ import {
   Redirect
 } from "react-router-dom";
 
-export default function Main({ user, currentLat, currentLong, items, dashboard, street, city, state, zip, onSortEnd, addToDashboard, removeFromDashboard, checkDate, handleClaim, handleAvail, handleSearchActive, searchActive, fetchLocation, checkDistance, fetchDirections, polyline, route, routeId, plotMarker, plot }) {
+export default function Main({ user, currentLat, currentLong, items, dashboard, address, onSortEnd, addToDashboard, removeFromDashboard, handleClaim, handleAvail, handleSearchActive, searchActive, fetchLocation, checkDistance, fetchDirections, polyline, route, routeId, plotMarker, plot }) {
 
   const [dash, setDash] = useState(false)
   return (
@@ -27,12 +27,9 @@ export default function Main({ user, currentLat, currentLong, items, dashboard, 
         currentLat={currentLat} 
         currentLong={currentLong} 
         items={items}
-        street={street}
-        city={city}
-        state={state}
-        zip={zip}
+        address={address}
         addToDashboard={addToDashboard}
-        fetchLocation={fetchLocation} 
+        fetchLocation={fetchLocation}
         checkDistance={checkDistance}
         polyline={polyline}
         route={route}
@@ -40,7 +37,7 @@ export default function Main({ user, currentLat, currentLong, items, dashboard, 
         />
         <section className="section">
           {dash ? <Dashboard user={user} dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance} fetchDirections={fetchDirections} route={route} routeId={routeId} plotMarker={plotMarker}/>:
-          <Active user={user} items={items} checkDate={checkDate} addToDashboard={addToDashboard} handleClaim={handleClaim} handleAvail={handleAvail} handleSearchActive={handleSearchActive} searchActive={searchActive} fetchLocation={fetchLocation} checkDistance={checkDistance} plotMarker={plotMarker}/>}
+          <Active user={user} items={items} addToDashboard={addToDashboard} handleClaim={handleClaim} handleAvail={handleAvail} handleSearchActive={handleSearchActive} searchActive={searchActive} fetchLocation={fetchLocation} checkDistance={checkDistance} plotMarker={plotMarker}/>}
         </section>
       </section>
     </main>

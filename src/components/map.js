@@ -69,7 +69,7 @@ export default class MapContainer extends React.Component {
   }
 
   render() {
-    const { currentLat, currentLong, items, street, city, state, zip, addToDashboard, polyline, route, plot } = this.props
+    const { currentLat, currentLong, items, address, addToDashboard, polyline, route, plot } = this.props
     const position = [currentLat, currentLong]
 
     const pinU = renderToStaticMarkup(<i id="user" class="fas fa-map-pin"></i>)
@@ -89,7 +89,7 @@ export default class MapContainer extends React.Component {
           <Marker icon={pinUser} position={position}>
             <Popup>
               <div className="popup">
-                <h4>{street}, {city}, {state} {zip}</h4>
+                <h4 id="current-address">{address.street}, {address.city}, {address.state} {address.zip}</h4>
                 <span>You are Here!</span>
               </div>
             </Popup>

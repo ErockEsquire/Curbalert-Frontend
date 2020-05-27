@@ -12,7 +12,7 @@ export default class Histories extends React.Component {
   }
 
   renderHistories = () => {
-    return this.filterHistories(this.props.histories).map(history => <History key={history.id} history={history} checkDate={this.props.checkDate} addToDashboard={this.props.addToDashboard} handleDelete={this.props.handleDelete}/>)
+    return this.filterHistories(this.props.histories).map(history => <History key={history.id} history={history} addToDashboard={this.props.addToDashboard} handleDelete={this.props.handleDelete}/>)
   }
   
   render() {
