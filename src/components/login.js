@@ -46,7 +46,6 @@ export default class Login extends React.Component {
 
   render() {
     const { entry, password } = this.state
-    console.log(this.props.user)
     return (
       <div id="login" className="form-container">
         {this.props.user !== "pending" && <Redirect to="/home"/>}
