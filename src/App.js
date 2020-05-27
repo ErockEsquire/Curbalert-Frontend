@@ -10,6 +10,7 @@ import { checkDate, checkRecent, getTime, getDate} from './components/utils'
 
 import {
   BrowserRouter as Router,
+  Redirect,
   Route
 } from "react-router-dom";
 
