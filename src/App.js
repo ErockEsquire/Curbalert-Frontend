@@ -57,7 +57,6 @@ class App extends React.Component {
 
   componentDidMount() {
     fetch(BASE_URL + `autologin`, {
-      credentials: "include"
     })
       .then(r => {
         if (!r.ok) {

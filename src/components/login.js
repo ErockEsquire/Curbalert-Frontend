@@ -23,7 +23,6 @@ export default class Login extends React.Component {
     event.preventDefault()
     fetch(`https://curbalert-api.herokuapp.com/login`, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },

@@ -43,7 +43,6 @@ export default function Navbar(props) {
     saveToDashboard()
     fetch(`https://curbalert-api.herokuapp.com/logout`, {
       method: "POST",
-      credentials: "include"
     })
       .then(r => r.json())
       .then(() => {
