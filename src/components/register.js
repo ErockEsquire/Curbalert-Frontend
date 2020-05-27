@@ -21,7 +21,7 @@ export default class Register extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
     if (this.state.password === this.state.password_confirmation) {
-      fetch("http://localhost:3000/register", {
+      fetch(`https://curbalert-api.herokuapp.com/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

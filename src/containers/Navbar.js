@@ -41,7 +41,7 @@ export default function Navbar(props) {
 
   const handleLogout = () => {
     saveToDashboard()
-    fetch("http://localhost:3000/logout", {
+    fetch(`https://curbalert-api.herokuapp.com/logout`, {
       method: "POST",
       credentials: "include"
     })

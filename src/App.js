@@ -52,8 +52,10 @@ class App extends React.Component {
     }
   }
 
+  BASE_URL = `https://curbalert-api.herokuapp.com/`
+
   componentDidMount() {
-    fetch("http://localhost:3000/autologin", {
+    fetch(BASE_URL + `autologin`, {
       credentials: "include"
     })
       .then(r => {
@@ -130,7 +132,7 @@ class App extends React.Component {
   }
 
   fetchItems = () => {
-    fetch(`http://localhost:3000/items`)
+    fetch(BASEURL + `items`)
     .then(response => response.json())
     .then(items => {
       let activeItems = items.filter(item => checkDate(item.date) <= 3)
@@ -270,7 +272,7 @@ class App extends React.Component {
     if(dashboard.length > 0) {
       const user = this.state.user
     
-      fetch(`http://localhost:3000/dashboard/${user}`, {
+      fetch(BASE_URL + `dashboard/${user}`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -293,7 +295,7 @@ class App extends React.Component {
   handleClaim = (item) => {
     item.claimed = true
     
-    fetch(`http://localhost:3000/items/${item.id}`, {
+    fetch(BASE_URL + `items/${item.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -365,7 +367,7 @@ class App extends React.Component {
   }
 
   handleDelete = (itemId) => {
-    fetch(`http://localhost:3000/items/${itemId}`, {
+    fetch(BASE_URL + `items/${itemId}`, {
       method: 'DELETE'
     })
       .then(response => {
@@ -428,7 +430,7 @@ class App extends React.Component {
     formData.append('item[image]', image);
     formData.append('user[id]', this.state.user.id)
 
-    fetch(`http://localhost:3000/items`, {
+    fetch(BASE_URL + `items`, {
       method: "POST",
       body: formData,
       contentType: false,
