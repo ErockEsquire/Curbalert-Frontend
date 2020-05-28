@@ -371,14 +371,12 @@ class App extends React.Component {
       method: 'DELETE'
     })
       .then(response => {
-        if(response.ok){
           const items = this.state.items.filter(item => item.id !== itemId)
           const histories = this.state.histories.filter(history => history.id !== itemId)
           this.setState({
             items: items,
             histories: histories
           })
-        }
       })
   }
 

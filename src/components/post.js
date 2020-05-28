@@ -30,7 +30,7 @@ export default class Post extends React.Component {
           <CSSTransition in={tab} timeout={400} classNames="display" unmountOnExit>
             <form className="post-form" onSubmit={handleSubmit}>
               <Form.Group widths='equal'>
-                <Form.Input placeholder="Name of item*" name="name" value={name} onChange={handleChange} maxLength="20"/>
+                <Form.Input placeholder="Name of item*" name="name" value={name} onChange={handleChange} minLength="1" maxLength="20"/>
                 <label>Image</label>
                 <input className="field" type="file" name="image" onChange={handleUpload}/>
                 {preview !== null ? <img className="history-image" src={preview} alt="upload"/>:null}

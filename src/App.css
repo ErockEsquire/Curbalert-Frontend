@@ -247,6 +247,9 @@ input {
   margin-right: 1rem;
 }
 
+
+
+
 div.leaflet-top.leaflet-left {
   right: 1rem;
 }
@@ -1070,6 +1073,20 @@ div.leaflet-top.leaflet-left {
   background: rgba(255,255,255, 0.7)
 }
 
+@media screen and (max-width: 600px) {
+  #app, #root {
+    line-height: 0;
+    height: 100vh;
+  }
+
+  .form-container {
+    width: 90%;
+    position: unset;
+    top: 45%;
+    margin: 45% auto;
+  }
+}
+
 .form-container form {
   display: flex;
   flex-direction: column;
@@ -1213,6 +1230,13 @@ div.leaflet-top.leaflet-left {
   50% {opacity: 1; visibility: visible;}
   75% {opacity: 1; visibility: visible;}
   100% {opacity: 0; visibility: hidden;}
+}
+
+@media screen and (max-width: 600px) {
+  .welcome-first {font-size: 6rem;left: 2rem;}
+  .welcome-second {font-size: 6rem;left: 6rem;}
+  .welcome-third {font-size: 6rem;left: 9rem;bottom: 19rem;}
+  .welcome-fourth {font-size: 6rem;left: 2rem;top: 32rem;}
 }
 
 .card-drop-enter {
