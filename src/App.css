@@ -1167,7 +1167,7 @@ div.leaflet-top.leaflet-left {
 .welcome-line {
   position: relative;
   top: 10vh;
-  left: 5vw;
+  padding-left: 5vw;
   display: flex;
   justify-content: flex-start;
 }
@@ -1194,7 +1194,7 @@ div.leaflet-top.leaflet-left {
   animation-delay: 0.5s;
   animation-iteration-count: 1;
   top: 30vh;
-  left: 29vw;
+  padding-left: 29vw;
 }
 
 .welcome-third {
@@ -1208,7 +1208,7 @@ div.leaflet-top.leaflet-left {
   animation-delay: 1s;
   animation-iteration-count: 1;
   top: 50vh;
-  left: 32.5vw;
+  padding-left: 32.5vw;
 }
 
 .welcome-fourth {
