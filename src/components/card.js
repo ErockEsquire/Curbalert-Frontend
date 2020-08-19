@@ -65,14 +65,14 @@ export default function Card({ user, item, checkDistance, addToDashboard, handle
           <p className="dash-comment">{item.comment}</p>
           <p className="posted-by">Claimed: <strong>{item.claimed ? "Yes":"No"}</strong></p>
           <p className="posted-by">Posted: <span className="username"><strong>{item.users[0].username}</strong></span> <Icon name="star"/>{item.users[0].rating}</p>
-          {(user.id !== item.users[0].id && !item.claimed) ? 
-            <div className="claim-button">
-              <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
-              <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
-              {(badClaim && !showClaim) && <div className="error">You are too far to claim this!</div>}
-            </div>
-            :null
-          }
+  {(user.id !== item.users[0].id && !item.claimed) ? 
+    <div className="claim-button">
+      <Button onClick={() => { setShowClaim(!showClaim); fetchLocation() }}>Claim</Button>
+      <div>{showClaim ? <Button onClick={() => { verifyClaim(item); setShowClaim(false) }}>Confirm!</Button>:null}</div>
+      {(badClaim && !showClaim) && <div className="error">You are too far to claim this!</div>}
+    </div>
+    :null
+  }
         </div>
         </CSSTransition>
       </div>

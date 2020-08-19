@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import './App.css';
+import './Responsive.css';
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
 import Login from './components/login'
