@@ -4,8 +4,6 @@ import Dashboard from '../components/dashboard'
 import Active from '../components/active'
 
 import {
-  BrowserRouter as Router,
-  Route,
   Redirect
 } from "react-router-dom";
 
@@ -15,14 +13,6 @@ export default function Main({ user, currentLat, currentLong, items, dashboard, 
   return (
     <main className="main-container">
       {user === "pending" && <Redirect to="/login"/>}
-      <div className="header">
-        <h1 className="header-title">CurbAlert</h1>
-        <div className="header-bar">
-          <h2 className={dash ? "header-text-large":"header-text"} onClick={() => setDash(true)}>Dashboard</h2>
-          <h2 className={dash ? "header-text":"header-text-large"} onClick={() => setDash(false)}>Active Items</h2>
-        </div>
-      </div>
-      <section className="main">
         <Map 
         currentLat={currentLat} 
         currentLong={currentLong} 
@@ -35,10 +25,15 @@ export default function Main({ user, currentLat, currentLong, items, dashboard, 
         route={route}
         plot={plot}
         />
-        <section className="section">
+      <section className="items-section">
+        <div className="header">
+          <h2 className={dash ? "header-text-large":"header-text"} onClick={() => setDash(true)}>Dashboard</h2>
+          <h2 className={dash ? "header-text":"header-text-large"} onClick={() => setDash(false)}>Active Items</h2>
+        </div>
+        <div className="items-section-content">
           {dash ? <Dashboard user={user} dashboard={dashboard} onSortEnd={onSortEnd} removeFromDashboard={removeFromDashboard} handleClaim={handleClaim} fetchLocation={fetchLocation} checkDistance={checkDistance} fetchDirections={fetchDirections} route={route} routeId={routeId} plotMarker={plotMarker}/>:
           <Active user={user} items={items} addToDashboard={addToDashboard} handleClaim={handleClaim} handleAvail={handleAvail} handleSearchActive={handleSearchActive} searchActive={searchActive} fetchLocation={fetchLocation} checkDistance={checkDistance} plotMarker={plotMarker}/>}
-        </section>
+        </div>
       </section>
     </main>
   )

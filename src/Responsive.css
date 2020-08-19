@@ -1,0 +1,137 @@
+@media only screen and (max-width: 800px) {
+  
+}
+
+@media only screen and (max-width: 600px) {
+
+  .welcome-line {
+    top: 10vh;
+    padding-left: 1rem;
+  }
+  
+  .welcome-first {
+    z-index: 9000;
+    font-size: 6rem;
+    margin-right: 2rem;
+  }
+  
+  .welcome-second {
+    position: absolute;
+    z-index: 9000;
+    font-size: 6rem;
+    top: 20vh;
+    padding-left: 1rem;
+  }
+  
+  .welcome-third {
+    position: absolute;
+    z-index: 9000;
+    font-size: 6rem;
+    top: 32vh;
+    padding-left: 1rem;
+  }
+  
+  .welcome-fourth {
+    display: none;
+  }
+
+  .navbar-close {
+    top: 0;
+    height: 8vh;
+    width: 100vw;
+  }
+
+  .navbar-open {
+    top: 0;
+    height: 8vh;
+    width: 100vw;
+  }
+
+  .navbar-list {
+    flex-direction: row;
+  }
+
+  .nav-tab {
+    justify-content: center;
+    height: 8vh;
+  }
+
+  .nav-text-open {
+    display: none;
+  }
+
+  #username {
+    display: none;
+  }
+
+  .postbar-close {
+    margin-left: 0;
+    margin-top: 8vh;
+    width: 0;
+    height: 92vh;
+  }
+  
+  .postbar-open {
+    margin-left: 0;
+    margin-top: 8vh;
+    width: 20rem;
+    height: 92vh;
+    position: fixed;
+    background-color: #414361;
+    transition: 400ms ease;
+    z-index: 1;
+    overflow-y: scroll;
+  }
+
+  .login-form, .register-form {
+    width: 90%;
+  }
+
+  .main-container {
+    padding-left: initial;
+    margin-top: 8vh;
+    height: 92vh;
+    flex-direction: column;
+  }
+
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .map-container .header {
+    display: none;
+  }
+
+  .map-container {
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .map.leaflet-container.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag {
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .header-bar {
+    min-width: 31rem;
+  }
+
+  .items-section {
+    margin-right: 0;
+    height: 52vh;
+  }
+
+  .items-section-content {
+    overflow: auto;
+  }
+
+  .header {
+    height: initial;
+    padding: 0;
+  }
+}
