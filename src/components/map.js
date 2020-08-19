@@ -79,7 +79,7 @@ export default class MapContainer extends React.Component {
 
     return (
       <div className="map-container">
-        <div className="header">
+        <div className="header-name">
           <h1 className="header-title">CurbAlert</h1>
         </div>
         <Map className="map" center={position} zoom={this.state.zoom} ref={this.bindMap}

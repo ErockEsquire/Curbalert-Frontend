@@ -1,5 +1,11 @@
-@media only screen and (max-width: 800px) {
-  
+@media only screen and (max-width: 900px) {
+  .header-text {
+    font-size: 2rem;
+  }
+
+  .header-text-large {
+    font-size: 2rem;
+  }
 }
 
 @media only screen and (max-width: 600px) {
