@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 import './App.css';
-import './Responsive.css';
+import './Responsive.css'
 import Main from './containers/Main'
 import Navbar from './containers/Navbar'
 import Login from './components/login'
 import Register from './components/register'
 import Welcome from './components/welcome'
 import arrayMove from 'array-move';
-import { checkDate, checkRecent, getTime, getDate} from './components/utils'
+import { checkRecent, getTime, getDate} from './components/utils'
+//checkDate import ^ back for date
 
 import {
   BrowserRouter as Router,
@@ -136,8 +137,9 @@ class App extends React.Component {
     fetch(BASE_URL + `items`)
     .then(response => response.json())
     .then(items => {
-      let activeItems = items.filter(item => checkDate(item.date) <= 3)
-      activeItems = checkRecent(activeItems)
+      // let activeItems = items.filter(item => checkDate(item.date) <= 3)
+      //reimport checkDate
+      let activeItems = checkRecent(items)
       this.setState({
         items: activeItems
       })

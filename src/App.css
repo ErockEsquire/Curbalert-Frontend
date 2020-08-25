@@ -3,14 +3,7 @@
 }
 
 body {
-  background-image: url('./images/bench.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-#app, #root {
-  display: flex;
-  width: 100%; 
+  overflow: hidden;
 }
 
 .navbar-close {
@@ -65,7 +58,7 @@ body {
 }
 
 .nav-tab svg {
-  min-width: 2rem;
+  width: 2rem;
   margin: 0 1.5rem;
 }
 
@@ -111,7 +104,7 @@ body {
   background-color: #414361;
   transition: 400ms ease;
   z-index: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .post-close {
@@ -248,7 +241,7 @@ input {
 }
 
 
-
+/* main-content */
 
 div.leaflet-top.leaflet-left {
   right: 1rem;
@@ -261,14 +254,20 @@ div.leaflet-top.leaflet-left {
   background-size: cover;
   background-repeat: no-repeat;
   padding-left: 70px;
+  display: flex;
 }
 
 .header {
   height: 4rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   display: flex;
   padding: 1rem 1rem;
+}
+
+.header-name {
+  height: 4rem;
+  padding: 0 1rem;
 }
 
 .header-title {
@@ -311,17 +310,25 @@ div.leaflet-top.leaflet-left {
   display: flex;
   justify-content: space-between;
   width: 36%;
-  padding: 0 2rem;
-  margin-right: 1rem;
+  margin: 1rem;
 }
 
-.main {
-  display: flex;
-  height: 90%;
+.header-bar h2 {
+  margin-left: 1rem;
 }
 
 .map-container {
   height: 100%;
+}
+
+.map.leaflet-container.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag {
+  display: inline-block; 
+  margin: 0px 1.2rem 0 .5rem; 
+  height: 90vh; 
+  width: 57vw;
+  border: 1px solid grey;
+  border-radius: 10px; 
+  z-index: 0;
 }
 
 #current-address {
@@ -558,7 +565,8 @@ div.leaflet-top.leaflet-left {
 
 .active-image-container {
   position: relative;
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
+  height: 14vw;
   overflow: hidden;
 }
 
@@ -575,7 +583,7 @@ div.leaflet-top.leaflet-left {
 
 .active-image {
   width: 100%;
-  height: 14vw;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -656,12 +664,18 @@ div.leaflet-top.leaflet-left {
   bottom: 3px;
 }
 
-.section {
+.items-section {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-right: 1.5vw;
+}
+
+.items-section-content {
   background-color: rgba(255, 255, 255, 0.4);
   width: 100%;
+  height: 90vh;
   border-radius: 10px;
-  margin-right: 0.3rem;
 }
 
 .color-block {
@@ -673,7 +687,7 @@ div.leaflet-top.leaflet-left {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  margin: 1rem 0.5rem;
+  padding: 1rem;
 }
 
 .dash-container {
@@ -936,6 +950,9 @@ div.leaflet-top.leaflet-left {
 
 .active-div {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .active-search {
@@ -944,13 +961,9 @@ div.leaflet-top.leaflet-left {
 }
 
 .active-container {
-  width: 36%;
   display: flex;
   overflow-y: auto;
-  position: fixed;
-  right: 0;
-  height: 79vh;
-  margin-right: 0.2rem;
+  border-radius: 9px;
 }
 
 .column-one {
@@ -1058,33 +1071,23 @@ div.leaflet-top.leaflet-left {
   margin: 0;
 }
 
-
 .form-container {
-  margin: 1rem auto;
-  padding: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 8px;
-  border-radius: 10px;
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  width: 500px;
-  margin-top: -250px;
-  margin-left: -250px;
-  background: rgba(255,255,255, 0.7)
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('./images/bench.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-@media screen and (max-width: 600px) {
-  #app, #root {
-    line-height: 0;
-    height: 100vh;
-  }
-
-  .form-container {
-    width: 90%;
-    position: unset;
-    top: 45%;
-    margin: 45% auto;
-  }
+.login-form, .register-form {
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 0px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255, 0.7);
+  width: 40%;
 }
 
 .form-container form {
@@ -1165,9 +1168,15 @@ div.leaflet-top.leaflet-left {
   animation-iteration-count: 1;
 }
 
+.welcome-line {
+  position: relative;
+  top: 10vh;
+  padding-left: 5vw;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .welcome-first {
-  width: 100vw;
-  position: absolute;
   opacity: 0;
   z-index: 9000;
   font-family: 'Bebas Neue', cursive;
@@ -1175,12 +1184,10 @@ div.leaflet-top.leaflet-left {
   animation-name: welcoming;
   animation-duration: 4s;
   animation-iteration-count: 1;
-  top: 7rem;
-  left: 4rem;
+  margin-right: 5rem;
 }
 
 .welcome-second {
-  width: 100vw;
   position: absolute;
   opacity: 0;
   z-index: 9000;
@@ -1190,12 +1197,11 @@ div.leaflet-top.leaflet-left {
   animation-duration: 2s;
   animation-delay: 0.5s;
   animation-iteration-count: 1;
-  left: 30rem;
-  top: 15rem;
+  top: 30vh;
+  padding-left: 29vw;
 }
 
 .welcome-third {
-  width: 100vw;
   position: absolute;
   opacity: 0;
   z-index: 9000;
@@ -1205,23 +1211,20 @@ div.leaflet-top.leaflet-left {
   animation-duration: 2s;
   animation-delay: 1s;
   animation-iteration-count: 1;
-  left: 34rem;
-  bottom: 5rem;
+  top: 50vh;
+  padding-left: 32.5vw;
 }
 
 .welcome-fourth {
-  width: 100vw;
-  position: absolute;
   opacity: 0;
   z-index: 9000;
   font-family: 'Bebas Neue', cursive;
   font-size: 10rem;
+  margin-top: 0;
   animation-name: welcoming;
   animation-duration: 2.5s;
   animation-delay: 1.5s;
   animation-iteration-count: 1;
-  top: 89px;
-  left: 38rem;
 }
 
 @keyframes welcoming {
@@ -1233,10 +1236,7 @@ div.leaflet-top.leaflet-left {
 }
 
 @media screen and (max-width: 600px) {
-  .welcome-first {font-size: 6rem;left: 2rem;}
-  .welcome-second {font-size: 6rem;left: 6rem;}
-  .welcome-third {font-size: 6rem;left: 9rem;bottom: 19rem;}
-  .welcome-fourth {font-size: 6rem;left: 2rem;top: 32rem;}
+  
 }
 
 .card-drop-enter {
