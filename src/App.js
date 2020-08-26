@@ -8,7 +8,7 @@ import Register from './components/register'
 import Welcome from './components/welcome'
 import arrayMove from 'array-move';
 import { checkRecent, getTime, getDate} from './components/utils'
-//checkDate import ^ back for date
+// import checkDate ^ for date restriction on items
 
 import {
   BrowserRouter as Router,
@@ -57,6 +57,7 @@ class App extends React.Component {
     }
   }
 
+  //autologin feature allowing users to login automatically when returning to site. Works on localhost, but upon deploying, CORS blocks this feature
   componentDidMount() {
     fetch(BASE_URL + `autologin`, {
     })
@@ -80,6 +81,7 @@ class App extends React.Component {
       })
     }, 3000)
   }
+
 
   componentDidUpdate(prevProps,prevState,snapshot) {
     if (this.state.user !== prevState.user && this.state.user !== "pending") {
@@ -133,12 +135,13 @@ class App extends React.Component {
     })
   }
 
+  //removed checkDate function from item fetch so that all items ever posted will appear in the app. Otherwise, only items posted less than 3 days old will appear on app
   fetchItems = () => {
     fetch(BASE_URL + `items`)
     .then(response => response.json())
     .then(items => {
       // let activeItems = items.filter(item => checkDate(item.date) <= 3)
-      //reimport checkDate
+      // reimport checkDate
       let activeItems = checkRecent(items)
       this.setState({
         items: activeItems
@@ -146,6 +149,7 @@ class App extends React.Component {
     })
   }
 
+  //finds user coordinates using Geolocation API
   fetchLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {(this.geolocationCallback(position))}
@@ -164,6 +168,7 @@ class App extends React.Component {
     }, () => this.geoCodeLocation())
   }
   
+  //sends user coordinates to Google Geocode API, returning a common address and setting the state, which is sent to item POST form and the map
   geoCodeLocation = () => {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.currentLat},${this.state.currentLong}&key=${process.env.REACT_APP_GOOGLE_API}`)
     .then(r => r.json())
@@ -188,6 +193,7 @@ class App extends React.Component {
     })
   }
 
+  //decodes Google Directions polyline
   fetchDirections = (item, mode) => {
     var polyUtil = require('polyline-encoded');
     
@@ -207,6 +213,10 @@ class App extends React.Component {
       }, () => directionsCall())
     }
 
+    
+    //Google Directions requires Google Maps API to function, otherwise CORS will block it. 
+    //This is the case since this app was built using with Leaflet Map API. 
+    //cors-anywhere endpoint in transitURL is a duct-tape solution to this problem.
     const directionsCall = () => {
       const transitUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&transit_mode=subway&key=${process.env.REACT_APP_GOOGLE_API}`
       const allUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`
@@ -225,6 +235,8 @@ class App extends React.Component {
     }
   }
 
+  //uses Haversine formula to check distance between the user and the item. 
+  //In card component, a nested ternary uses the return for this function to decide whether a user can claim an item or not.
   checkDistance = (item) => {
     function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
       const R = 6371;
@@ -270,6 +282,7 @@ class App extends React.Component {
     })
   }
 
+  //saves dashboard when user logs out
   saveToDashboard = () => {
     const dashboard = this.state.dashboard
     if(dashboard.length > 0) {
@@ -295,6 +308,7 @@ class App extends React.Component {
     }));
   };
 
+  //when user claims an item, this changes the item's claimed status to true in the Rails backend
   handleClaim = (item) => {
     item.claimed = true
     
@@ -314,6 +328,7 @@ class App extends React.Component {
     })
   }
 
+  //updates information of the item immediately after someone claims.
   updateItem = (newItem) => {
     let newItems = this.state.items.filter(item => item.id !== newItem.id)
     let noUpdateItems = newItems.filter(item => item.users[0].id !== newItem.users[0].id)
@@ -359,6 +374,7 @@ class App extends React.Component {
     })
   }
 
+  //sends a preview of item image that was uploaded on form
   handleUpload = (event) => {
     this.setState({
       form: {
@@ -387,6 +403,7 @@ class App extends React.Component {
     event.preventDefault()
     URL.revokeObjectURL(this.state.form.preview)
 
+    //User's address may have changed since logging in. If so, this will submit a second check to update the location of the user
     if(this.state.form.street !== this.state.address.street) {
       const street = this.state.form.street.replace(/ /g, '+')
       const city = this.state.form.city.replace(/ /g, '+')
@@ -407,6 +424,8 @@ class App extends React.Component {
     }
   }
 
+  //Creates JSON of item with form inputs sent to state, then sends to Rails backend.
+  //Upon posting item, the item is automatically added to the user's dashboard, the user's post history, and will be public in active items.
   submitForm = () => {
     const { name, category, street, city, state, zip, comment, quality, validation, claimed, final, latitude, longitude, image } = this.state.form
     const date = getDate()
