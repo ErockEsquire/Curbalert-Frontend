@@ -129,6 +129,7 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
     )
   }
 
+  //Library for draggable components. Uses React-sortable-hoc and array-move
   const DragHandle = sortableHandle(() => <Icon className="dash-drag" name="angle double up" />);
   const SortableItemContainer = sortableContainer(({ children }) => <div className="dash-container">{children}</div>);
   const SortableItem = sortableElement(({ item }) => 
