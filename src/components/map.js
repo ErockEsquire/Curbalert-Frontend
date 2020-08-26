@@ -28,6 +28,7 @@ export default class MapContainer extends React.Component {
 
   map = ""
 
+ //creates a ref specifically for a marker. This allows the button on items to center onto this marker and expand it.
   bindMap = (ref) => {
     if (ref) {
       this.map = ref.leafletElement
