@@ -1,12 +1,14 @@
-Curbalert allows users to post images and details of things people are giving or throwing away in their area, becoming viewable on a public map. Assisted by Google Directions, users can make their way to hidden treasures that are simply going to waste.  
+# Curbalert  
+allows users to post images and details of things people are giving or throwing away in their area, becoming viewable on a public map. Assisted by Google Directions, users can make their way to hidden treasures that are simply going to waste.  
 
-#Curbalert Frontend uses React and relies on a Rails backend, named Curbalert-Backend in repository. Curbalert uses custom CSS, with styling framework Semantic UI React, and React Transition Group library. API's included are Geolocation API, Google Directions API, and Leaflet API. For image storage, Curbalert Backend uses Rails with active storage enabled, which uses AWS S3 Cloud to store images. Sadly, this application still uses class components. Since writing this code, I have been religiously using only redux and hooks.  
+## Curbalert Frontend  
+uses React and relies on a Rails backend, named Curbalert-Backend in repository. Curbalert uses custom CSS, with styling framework Semantic UI React, and React Transition Group library. API's included are Geolocation API, Google Directions API, and Leaflet API. For image storage, Curbalert Backend uses Rails with active storage enabled, which uses AWS S3 Cloud to store images. Sadly, this application still uses class components. Since writing this code, I have been religiously using only redux and hooks.  
 
-#Start Build. 
+## Start Build  
 To begin frontend, run 'npm install'.  
 Then run 'npm start' to start local server.  
   
-#Use Deployed  
+## Use Deployed  
 Curbalert is already deployed to curbalert.netlify.app, relying on https://curbalert-api.herokuapp.com endpoint. If there are still dynos, a list of items should appear upon logging in, otherwise, unfortunately this endpoint will not be usable.  
   
   
