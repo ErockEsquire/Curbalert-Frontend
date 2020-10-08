@@ -18,9 +18,6 @@ For image storage, Curbalert Backend uses Rails with active storage enabled, whi
 To begin frontend, run 'npm install'.  
 Then run 'npm start' to start local server.  
   
-## Use Deployed  
-Curbalert is already deployed to curbalert.netlify.app, relying on https://curbalert-api.herokuapp.com endpoint. If there are still dynos, a list of items should appear upon logging in, otherwise, unfortunately this endpoint will not be usable.  
-  
 ## Requires Geolocation  
 Allow location services to get the most out of Curbalert. Location services allows the user to see where they are on the map, which in turn helps the user fill in address form inputs in the create a post form, without requiring the user to do so manually. Allowing location services also grants access to Google Directions, a feature allowing users to see their directions to an item in the city.  
   
@@ -39,3 +36,6 @@ For creating a post, a user can upload an image and be able to see a preview of 
 If user makes a post, the item should appear in post history.  
   
 Lastly, a user can sign out, which will save all items on dashboard to the account.  
+  
+## Use Deployed  
+Curbalert is already deployed to curbalert.netlify.app, relying on https://curbalert-api.herokuapp.com endpoint. If there are still dynos, a list of items should appear upon logging in. Otherwise, unfortunately the /items endpoint will not be usable.  
