@@ -21,9 +21,6 @@ Then run 'npm start' to start local server.
 ## Use Deployed  
 Curbalert is already deployed to curbalert.netlify.app, relying on https://curbalert-api.herokuapp.com endpoint. If there are still dynos, a list of items should appear upon logging in, otherwise, unfortunately this endpoint will not be usable.  
   
-  
-  ############################################################################################################################
-  
 ## Requires Geolocation  
 Allow location services to get the most out of Curbalert. Location services allows the user to see where they are on the map, which in turn helps the user fill in address form inputs in the create a post form, without requiring the user to do so manually. Allowing location services also grants access to Google Directions, a feature allowing users to see their directions to an item in the city.  
   
