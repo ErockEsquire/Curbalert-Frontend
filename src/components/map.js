@@ -72,7 +72,7 @@ export default class MapContainer extends React.Component {
   render() {
     const { currentLat, currentLong, items, address, addToDashboard, polyline, route, plot } = this.props
     const position = [currentLat, currentLong]
-
+    console.log(position)
     const pinU = renderToStaticMarkup(<i id="user" className="fas fa-map-pin"></i>)
     const step = renderToStaticMarkup(<i id="step" className="fas fa-map-marker-alt"></i>)
     const pinUser = divIcon({ html: pinU });
@@ -84,6 +84,7 @@ export default class MapContainer extends React.Component {
           <h1 className="header-title">CurbAlert</h1>
         </div>
         <Map className="map" center={position} zoom={this.state.zoom} ref={this.bindMap}
+        style={{display: "inline-block", margin:"0px 1.2rem 0 .5rem", height: "87.5vh", width: "57vw", border:"2px solid gray", borderRadius: "10px", zIndex:"0"}}
         >
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
