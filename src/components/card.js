@@ -30,14 +30,14 @@ export default function Card({ user, item, checkDistance, addToDashboard, handle
     <div className="active-item" onMouseLeave={() => setShowClaim(false)} >
       <div className="active-image-container">
         <img className="active-image" src={item.image_url} alt={item.name} onClick={() => handleCard()}/>
-        <Modal basic size='mini' trigger={<Icon name="search plus"/>}>
+        <Modal basic size='medium' trigger={<Icon name="search plus"/>}>
           <Modal.Content image>
             <img className={"image-modal"} src={item.image_url} alt={item.name}/>
           </Modal.Content>
         </Modal>
         <Popup 
           position='right center'
-          content='Add to Dashboard'
+          content='Add to Dashboard to access directions!'
           size='tiny'
           trigger={<Icon className="from-active" name="add square" onClick={() => {addToDashboard(item); switchClick.play()}}/>}
         />

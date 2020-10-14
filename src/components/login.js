@@ -48,7 +48,7 @@ export default class Login extends React.Component {
         <div className="login-form">
           {this.props.user !== "pending" && <Redirect to="/home"/>}
           <h1 className="header-title">CurbAlert</h1>
-          <p>*For Testing, log in email: Eric / password: pig12345</p>
+          <p>*For Testing, you can register any email + password, or log in email: Eric | password: pig12345</p>
           <p>There will be 10 seconds of inactivity after submitting for Heroku Backend to wake</p>
           <p>Thank you!</p>
           <div className="entry-form">

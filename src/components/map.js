@@ -72,7 +72,6 @@ export default class MapContainer extends React.Component {
   render() {
     const { currentLat, currentLong, items, address, addToDashboard, polyline, route, plot } = this.props
     const position = [currentLat, currentLong]
-    console.log(position)
     const pinU = renderToStaticMarkup(<i id="user" className="fas fa-map-pin"></i>)
     const step = renderToStaticMarkup(<i id="step" className="fas fa-map-marker-alt"></i>)
     const pinUser = divIcon({ html: pinU });
