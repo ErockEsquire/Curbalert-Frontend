@@ -7,7 +7,7 @@ import { ReactComponent as CarIcon } from '../icons/car.svg'
 import UIfx from 'uifx';
 import Sound from '../sounds/remove.mp3'
 
-export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance, fetchDirections, route, routeId, plotMarker }) {
+export default function Dashboard({ user, currentLat, currentLong, dashboard, onSortEnd, removeFromDashboard, handleClaim, fetchLocation, checkDistance, fetchDirections, route, routeId, plotMarker }) {
 
   const removeClick = new UIfx(Sound);
 
@@ -82,6 +82,7 @@ export default function Dashboard({ user, dashboard, onSortEnd, removeFromDashbo
             <Button onClick={() => {fetchDirections(item, mode); setShowDirections(true)}}>Get Directions!</Button>
           </div>
           {(routeId === item.id && showDirections && Object.keys(route).length > 0) && renderDirections(route) }
+          {!(currentLat && currentLong) && <span>Enable Location Services for Directions!</span>}
         </div>
       </div>
     )

@@ -218,21 +218,24 @@ class App extends React.Component {
     //This is the case since this app was built using with Leaflet Map API. 
     //cors-anywhere endpoint in transitURL is a duct-tape solution to this problem.
     const directionsCall = () => {
-      const transitUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&transit_mode=subway&key=${process.env.REACT_APP_GOOGLE_API}`
-      const allUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`
+      if (this.state.currentLat && this.state.currentLong) {
+        const transitUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&transit_mode=subway&key=${process.env.REACT_APP_GOOGLE_API}`
+        const allUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.currentLat},${this.state.currentLong}&destination=${item.latitude},${item.longitude}&mode=${mode}&key=${process.env.REACT_APP_GOOGLE_API}`
 
-      fetch(mode === "transit" ? transitUrl : allUrl)
-      .then(r => r.json())
-      .then(object => {
-        let encoded = object.routes[0].overview_polyline.points
-        let polyline = polyUtil.decode(encoded)
-        this.setState({
-          polyline: polyline,
-          route: object.routes[0],
-          routeId: item.id
+        fetch(mode === "transit" ? transitUrl : allUrl)
+        .then(r => r.json())
+        .then(object => {
+          let encoded = object.routes[0].overview_polyline.points
+          let polyline = polyUtil.decode(encoded)
+          this.setState({
+            polyline: polyline,
+            route: object.routes[0],
+            routeId: item.id
+          })
         })
-      })
+      }
     }
+    
   }
 
   //uses Haversine formula to check distance between the user and the item. 
